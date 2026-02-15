@@ -2,58 +2,68 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Neon Bounce: Gravity Lanes – Free Hyper-Casual HTML5 Game</title>
-<meta name="description" content="Neon Bounce: Gravity Lanes – tap to flip gravity, ride platforms through a neon tower. Master hot-edge combos, lane-shift gates, and climb the leaderboard. Play free in your browser!">
-<meta name="theme-color" content="#0a0a1a">
-<meta property="og:title" content="Neon Bounce: Gravity Lanes">
-<meta property="og:description" content="Tap to flip gravity and bounce through a neon tower. Free hyper-casual HTML5 game.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Neon Bounce - Free HTML5 Game</title>
+<meta name="description" content="Play Neon Bounce - Tap to bounce a glowing ball between neon platforms. Miss a platform and fall into the void. Platforms get narrower as score increases.">
+<meta name="theme-color" content="#0b0014">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://balinti.github.io/neon-bounce/og.png">
+<meta property="og:title" content="Neon Bounce - Free HTML5 Game">
+<meta property="og:description" content="Tap to flip gravity and streak across neon platforms. How far can you go?">
+<meta property="og:url" content="https://balinti.github.io/neon-bounce/">
+<meta property="og:image" content="https://balinti.github.io/neon-bounce/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🟢</text></svg>">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4099346100621490" crossorigin="anonymous"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#06060f;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:#e0e0f0}
-#container{position:relative;width:100%;max-width:420px;height:100vh;height:100dvh;margin:0 auto;overflow:hidden;touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+html,body{width:100%;height:100%;overflow:hidden;background:#0b0014;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:#e0e0f0}
+#container{position:relative;width:100%;max-width:420px;max-height:750px;height:100vh;height:100dvh;margin:0 auto;overflow:hidden;touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 canvas{display:block;width:100%;height:100%}
 .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;pointer-events:auto;transition:opacity .3s}
 .overlay.hidden{opacity:0;pointer-events:none}
-#startScreen{background:linear-gradient(180deg,rgba(6,6,15,.95),rgba(10,10,30,.98))}
-#gameoverScreen{background:rgba(6,6,15,.92)}
-.title{font-size:2rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(135deg,#0ff,#f0f,#ff0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-shadow:none;margin-bottom:.3em}
-.subtitle{font-size:.85rem;color:#889;margin-bottom:2em;letter-spacing:1px}
-.tap-prompt{font-size:1.1rem;color:#aab;animation:pulse 1.6s ease-in-out infinite;cursor:pointer;padding:1em 2em}
-@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
-.best-label{font-size:.8rem;color:#667;text-transform:uppercase;letter-spacing:2px}
-.best-score{font-size:1.3rem;color:#88f;margin-bottom:1.5em}
-.go-score{font-size:4rem;font-weight:900;background:linear-gradient(135deg,#0ff,#f0f);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.go-label{font-size:.75rem;color:#556;text-transform:uppercase;letter-spacing:3px;margin-top:2em}
-.go-best{font-size:1.1rem;color:#88f;margin:.5em 0 1.5em}
-.new-best{color:#ff0;font-size:.7rem;text-transform:uppercase;letter-spacing:2px;animation:pulse 1s ease-in-out infinite}
-.share-btn{background:linear-gradient(135deg,#2a2a4a,#1a1a3a);border:1px solid rgba(255,255,255,.1);color:#aaf;padding:.6em 1.8em;border-radius:2em;font-size:.85rem;cursor:pointer;margin-bottom:1.5em;transition:background .2s}
+#startScreen{background:linear-gradient(180deg,rgba(11,0,20,.96),rgba(8,0,18,.98))}
+#gameoverScreen{background:rgba(11,0,20,.93)}
+.title{font-size:2.2rem;font-weight:900;letter-spacing:3px;text-transform:uppercase;background:linear-gradient(135deg,#0ff,#f0f,#ff0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.15em}
+.subtitle{font-size:.8rem;color:#7788aa;margin-bottom:.6em;letter-spacing:2px;text-transform:uppercase}
+.challenge-msg{font-size:.75rem;color:#f0f;margin-bottom:1.2em;letter-spacing:1px;opacity:0;transition:opacity .3s;max-height:0;overflow:hidden}
+.challenge-msg.show{opacity:1;max-height:40px;margin-bottom:1.2em}
+.best-label{font-size:.7rem;color:#556;text-transform:uppercase;letter-spacing:2px;margin-top:1.5em}
+.best-score{font-size:1.2rem;color:#88aaff;margin-bottom:1.5em}
+.tap-prompt{font-size:1rem;color:#99aabb;animation:pulse 1.5s ease-in-out infinite;cursor:pointer;padding:1em 2em}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+.go-label{font-size:.7rem;color:#556;text-transform:uppercase;letter-spacing:3px;margin-top:1.5em}
+.go-score{font-size:3.8rem;font-weight:900;background:linear-gradient(135deg,#0ff,#f0f);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.go-best{font-size:1rem;color:#88aaff;margin:.4em 0 1em}
+.new-best{color:#ff0;font-size:.65rem;text-transform:uppercase;letter-spacing:2px;animation:pulse .8s ease-in-out infinite}
+.share-btn{background:linear-gradient(135deg,#2a2a4a,#1a1a3a);border:1px solid rgba(255,255,255,.1);color:#aabbff;padding:.55em 1.6em;border-radius:2em;font-size:.8rem;cursor:pointer;margin-bottom:1em;transition:background .2s}
 .share-btn:hover{background:linear-gradient(135deg,#3a3a5a,#2a2a4a)}
-#hud{position:absolute;top:0;left:0;right:0;padding:12px 16px;display:flex;justify-content:space-between;align-items:flex-start;z-index:5;pointer-events:none}
-#hudScore{font-size:1.6rem;font-weight:800;color:#fff;text-shadow:0 0 10px rgba(0,255,255,.3)}
-#hudCombo{font-size:.75rem;color:#f0f;text-transform:uppercase;letter-spacing:1px;opacity:0;transition:opacity .2s}
-#hudSave{font-size:.65rem;color:#0f0;letter-spacing:1px;opacity:0;transition:opacity .2s}
+#hud{position:absolute;top:0;left:0;right:0;padding:10px 14px;display:flex;justify-content:space-between;align-items:flex-start;z-index:5;pointer-events:none}
+#hudLeft{display:flex;flex-direction:column}
+#hudScore{font-size:1.5rem;font-weight:800;color:#fff;text-shadow:0 0 8px rgba(0,255,255,.3)}
+#hudStreak{font-size:.65rem;color:#f0f;text-transform:uppercase;letter-spacing:1px;opacity:0;transition:opacity .2s}
+#hudRight{display:flex;flex-direction:column;align-items:flex-end}
+#hudBurst{font-size:.6rem;color:#0ff;letter-spacing:1px;opacity:0;transition:opacity .2s}
+#hudMulti{font-size:.7rem;color:#ff0;font-weight:700;opacity:0;transition:opacity .2s}
 .seo-footer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:420px;width:100%;z-index:2;overflow:hidden}
-.seo-toggle{display:block;width:100%;background:rgba(10,10,20,.8);border:none;border-top:1px solid rgba(255,255,255,.05);color:#445;font-size:.6rem;padding:4px;cursor:pointer;text-align:center;letter-spacing:1px}
-.seo-content{max-height:0;overflow:hidden;background:rgba(10,10,20,.95);transition:max-height .3s;font-size:.65rem;color:#556;line-height:1.5;padding:0 12px}
-.seo-content.open{max-height:200px;padding:8px 12px}
+.seo-toggle{display:block;width:100%;background:rgba(11,0,20,.85);border:none;border-top:1px solid rgba(255,255,255,.05);color:#445;font-size:.55rem;padding:4px;cursor:pointer;text-align:center;letter-spacing:1px;text-transform:uppercase}
+.seo-content{max-height:0;overflow-y:auto;background:rgba(11,0,20,.96);transition:max-height .3s;font-size:.65rem;color:#667;line-height:1.6;padding:0 12px}
+.seo-content.open{max-height:220px;padding:10px 12px}
+.seo-content h3{color:#8899bb;font-size:.7rem;margin:8px 0 4px;letter-spacing:1px}
+.seo-content p{margin-bottom:6px}
+.hidden{display:none!important}
 </style>
 </head>
 <body>
 <div id="container">
   <canvas id="gc"></canvas>
   <div id="hud" class="hidden">
-    <div><div id="hudScore">0</div><div id="hudCombo"></div></div>
-    <div id="hudSave"></div>
+    <div id="hudLeft"><div id="hudScore">0</div><div id="hudStreak"></div></div>
+    <div id="hudRight"><div id="hudMulti"></div><div id="hudBurst"></div></div>
   </div>
   <div id="startScreen" class="overlay">
     <div class="title">Neon Bounce</div>
-    <div class="subtitle">Gravity Lanes</div>
+    <div class="subtitle">Flip &amp; Streak</div>
+    <div class="challenge-msg" id="challengeMsg">Can you beat <span id="challengeScore">0</span> points?</div>
     <div class="best-label">Best Score</div>
     <div class="best-score" id="startBest">0</div>
     <div class="tap-prompt" id="startBtn">Tap to Start</div>
@@ -69,590 +79,973 @@ canvas{display:block;width:100%;height:100%}
   </div>
 </div>
 <div class="seo-footer">
-  <button class="seo-toggle" id="seoToggle">About This Game &#9662;</button>
+  <button class="seo-toggle" id="seoToggle">About / FAQ &#9662;</button>
   <div class="seo-content" id="seoContent">
-    <p><strong>Neon Bounce: Gravity Lanes</strong> is a free hyper-casual HTML5 game. Tap or press Space to flip gravity and guide your ball through a neon tower. Land on platforms to score points. Hit the glowing hot-edge strips on each platform edge for bonus points and combo multipliers. Use gates between platforms to shift between the three lanes. You start with one Neon Save that auto-teleports you to safety if you miss a platform. Earn another save by landing 8 hot-edge landings in a row. Difficulty increases as you climb higher. Controls: Tap screen or press Space/Enter. Works on mobile and desktop browsers.</p>
+    <h3>What is Neon Bounce?</h3>
+    <p><strong>Neon Bounce: Flip &amp; Streak</strong> is a free hyper-casual HTML5 game you can play directly in your browser on any device. Your glowing ball auto-scrolls across an endless neon track. One tap flips gravity between the floor lane and the ceiling lane.</p>
+    <h3>How to Play</h3>
+    <p>Tap the screen or press Space/Enter to flip gravity. Land on platforms to score points. Each platform has a wide SAFE zone and a narrow center HOT zone. Landing on the HOT zone builds your streak multiplier and charges your Burst meter. Hit RISK gates for big bonus points. If you miss a platform, a neon tether appears briefly &mdash; tap during the tether window to save your run (but your multiplier resets). If the tether expires, you fall into the void and the game ends.</p>
+    <h3>Tips</h3>
+    <p>Aim for HOT zones to build combos. Difficulty ramps with speed, tighter HOT zones, moving segments, and shorter tether windows. Challenge your friends by sharing your score!</p>
+    <h3>Controls</h3>
+    <p>Touch/click anywhere or press Space/Enter to flip gravity. Works on mobile phones, tablets, and desktop browsers.</p>
   </div>
 </div>
 <script>
 'use strict';
 (()=>{
 
-// ═══ CONSTANTS ═══
-const LS_KEY='neonBounce_best';
-const LANE_COUNT=3;
-const BALL_R=10;
-const GRAVITY=0.32;
-const MAX_VY=8;
-const PLAT_H=10;
-const HOT_EDGE_W=7;
-const GATE_W_BASE=40;
-const SCROLL_BASE=1.4;
-const PLAT_GAP_BASE=105;
-const PARTICLE_CAP=150;
-const SHAKE_DECAY=0.86;
-const NEAR_MISS_PX=5;
-const NEAR_MISS_MS=120;
-const SAVES_STREAK_REQ=8;
+// ════════════════════════════════════════
+// CONSTANTS
+// ════════════════════════════════════════
+const LS_KEY = 'neonBounce_best';
+const BALL_R = 9;
+const GRAVITY = 0.38;
+const MAX_VY = 10;
+const PLAT_H = 12;
+const SCROLL_BASE = 2.2;
+const PARTICLE_CAP = 180;
+const SHAKE_DECAY = 0.88;
+const TETHER_BASE = 80; // frames at 60fps equivalent
+const TETHER_MIN = 40;
 
-// ═══ DOM ═══
-const canvas=document.getElementById('gc');
-const ctx=canvas.getContext('2d');
-const container=document.getElementById('container');
-const startScreen=document.getElementById('startScreen');
-const gameoverScreen=document.getElementById('gameoverScreen');
-const hudEl=document.getElementById('hud');
-const hudScore=document.getElementById('hudScore');
-const hudCombo=document.getElementById('hudCombo');
-const hudSave=document.getElementById('hudSave');
-const startBestEl=document.getElementById('startBest');
-const goScoreEl=document.getElementById('goScore');
-const goBestEl=document.getElementById('goBest');
-const newBestTag=document.getElementById('newBestTag');
-const shareBtn=document.getElementById('shareBtn');
-const seoToggle=document.getElementById('seoToggle');
-const seoContent=document.getElementById('seoContent');
+// Layout: floor lane bottom, ceiling lane top
+const FLOOR_Y_RATIO = 0.72;
+const CEIL_Y_RATIO = 0.28;
+const TRACK_LEFT = 0.08;
+const TRACK_RIGHT = 0.92;
 
-// ═══ STATE ═══
-let W,H,dpr;
-let state='start';
-let score,bestScore,combo,hotEdgeStreak;
-let ball,platforms,gates,particles;
-let scrollSpeed,totalScrolled;
-let gravityDir; // 1=down, -1=up
-let shakeX,shakeY,shakeMag;
-let neonSaves,lastSafePlatIdx;
-let nearMissTimer,slowMo;
-let hueTime,vignetteAlpha;
-let nextPlatScreenY; // screen-space Y for next platform to spawn
+// ════════════════════════════════════════
+// DOM
+// ════════════════════════════════════════
+const canvas = document.getElementById('gc');
+const ctx = canvas.getContext('2d');
+const container = document.getElementById('container');
+const startScreen = document.getElementById('startScreen');
+const gameoverScreen = document.getElementById('gameoverScreen');
+const hudEl = document.getElementById('hud');
+const hudScore = document.getElementById('hudScore');
+const hudStreak = document.getElementById('hudStreak');
+const hudBurst = document.getElementById('hudBurst');
+const hudMulti = document.getElementById('hudMulti');
+const startBestEl = document.getElementById('startBest');
+const goScoreEl = document.getElementById('goScore');
+const goBestEl = document.getElementById('goBest');
+const newBestTag = document.getElementById('newBestTag');
+const shareBtn = document.getElementById('shareBtn');
+const seoToggle = document.getElementById('seoToggle');
+const seoContent = document.getElementById('seoContent');
+const challengeMsg = document.getElementById('challengeMsg');
+const challengeScoreEl = document.getElementById('challengeScore');
 
-// ═══ SIZING ═══
-function resize(){
-  const r=container.getBoundingClientRect();
-  dpr=Math.min(window.devicePixelRatio||1,3);
-  W=r.width; H=r.height;
-  canvas.width=W*dpr;
-  canvas.height=H*dpr;
-  canvas.style.width=W+'px';
-  canvas.style.height=H+'px';
-  ctx.setTransform(dpr,0,0,dpr,0,0);
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+let W, H, dpr;
+let state = 'start'; // start | playing | gameover
+let score, bestScore, streak, multiplier, burstMeter, burstMax;
+let ball, platforms, riskGates, particles;
+let scrollSpeed, totalScrolled, baseScrollSpeed;
+let onFloor; // true = floor lane, false = ceiling lane
+let shakeX, shakeY, shakeMag;
+let tetherActive, tetherTimer, tetherMaxTimer;
+let hueTime;
+let gameOverCooldown;
+let challengeTarget;
+
+// ════════════════════════════════════════
+// SIZING (HiDPI)
+// ════════════════════════════════════════
+function resize() {
+  const r = container.getBoundingClientRect();
+  dpr = Math.min(window.devicePixelRatio || 1, 3);
+  W = r.width;
+  H = r.height;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
-window.addEventListener('resize',resize);
+window.addEventListener('resize', resize);
 resize();
 
-// ═══ HELPERS ═══
-function laneX(l){return W*(l+1)/(LANE_COUNT+1)}
-function laneW(){return W/(LANE_COUNT+1)*0.72}
-function clamp(v,a,b){return v<a?a:v>b?b:v}
-function lerp(a,b,t){return a+(b-a)*t}
-function rand(a,b){return a+Math.random()*(b-a)}
-function randInt(a,b){return Math.floor(rand(a,b+1))}
-function hsl(h,s,l,a){return a!==undefined?`hsla(${h|0},${s|0}%,${l|0}%,${a})`:`hsl(${h|0},${s|0}%,${l|0}%)`}
+// ════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════
+function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+function lerp(a, b, t) { return a + (b - a) * t; }
+function rand(a, b) { return a + Math.random() * (b - a); }
+function randInt(a, b) { return Math.floor(rand(a, b + 1)); }
+function hsl(h, s, l, a) {
+  return a !== undefined
+    ? `hsla(${h|0},${s|0}%,${l|0}%,${a})`
+    : `hsl(${h|0},${s|0}%,${l|0}%)`;
+}
 
-// ═══ LOCAL STORAGE ═══
-function loadBest(){try{return parseInt(localStorage.getItem(LS_KEY))||0}catch(e){return 0}}
-function saveBest(s){try{localStorage.setItem(LS_KEY,String(s))}catch(e){}}
+function floorY() { return H * FLOOR_Y_RATIO; }
+function ceilY() { return H * CEIL_Y_RATIO; }
+function trackLeft() { return W * TRACK_LEFT; }
+function trackRight() { return W * TRACK_RIGHT; }
+function trackWidth() { return trackRight() - trackLeft(); }
 
-// ═══ PARTICLES ═══
-function spawnP(x,y,n,color,spd,life){
-  for(let i=0;i<n&&particles.length<PARTICLE_CAP;i++){
-    const a=rand(0,Math.PI*2),sp=rand(0.5,spd);
-    particles.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,
-      life:rand(life*.5,life),maxLife:life,color,r:rand(1.5,3.5),ring:false});
+// ════════════════════════════════════════
+// LOCAL STORAGE
+// ════════════════════════════════════════
+function loadBest() { try { return parseInt(localStorage.getItem(LS_KEY)) || 0; } catch(e) { return 0; } }
+function saveBest(s) { try { localStorage.setItem(LS_KEY, String(s)); } catch(e) {} }
+
+// ════════════════════════════════════════
+// CHALLENGE LINK
+// ════════════════════════════════════════
+function checkChallenge() {
+  const params = new URLSearchParams(window.location.search);
+  const c = parseInt(params.get('challenge'));
+  if (c > 0) {
+    challengeTarget = c;
+    challengeScoreEl.textContent = c;
+    challengeMsg.classList.add('show');
   }
 }
-function spawnRing(x,y,color){
-  if(particles.length>=PARTICLE_CAP)return;
-  particles.push({x,y,vx:0,vy:0,life:18,maxLife:18,color,r:0,ring:true,ringR:0,ringMax:55});
-}
-function tickParticles(dt){
-  for(let i=particles.length-1;i>=0;i--){
-    const p=particles[i];
-    p.life-=dt;
-    if(p.life<=0){particles.splice(i,1);continue}
-    if(p.ring){p.ringR+=(p.ringMax/p.maxLife)*dt;continue}
-    p.x+=p.vx*dt; p.y+=p.vy*dt;
-    p.vx*=0.96; p.vy*=0.96;
+
+// ════════════════════════════════════════
+// DIFFICULTY
+// ════════════════════════════════════════
+function diff() { return clamp(totalScrolled / 12000, 0, 1); }
+
+// Platform widths
+function safeWidth(d) { return clamp(trackWidth() * (0.28 - d * 0.07), trackWidth() * 0.18, trackWidth() * 0.28); }
+function hotWidth(d) { return clamp(trackWidth() * (0.12 - d * 0.04), trackWidth() * 0.04, trackWidth() * 0.12); }
+function platTotalWidth(d) { return safeWidth(d) * 2 + hotWidth(d); }
+
+// Gap between platforms (horizontal)
+function platGap(d) { return clamp(120 + d * 40 + rand(-15, 15), 90, 200); }
+
+// Tether duration
+function tetherDuration(d) { return clamp(TETHER_BASE - d * (TETHER_BASE - TETHER_MIN), TETHER_MIN, TETHER_BASE); }
+
+// ════════════════════════════════════════
+// PARTICLES
+// ════════════════════════════════════════
+function spawnP(x, y, n, color, spd, life) {
+  for (let i = 0; i < n && particles.length < PARTICLE_CAP; i++) {
+    const a = rand(0, Math.PI * 2), sp = rand(0.5, spd);
+    particles.push({
+      x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+      life: rand(life * 0.5, life), maxLife: life,
+      color, r: rand(1.5, 3.5), ring: false
+    });
   }
 }
-function drawParticles(){
-  for(const p of particles){
-    const a=clamp(p.life/p.maxLife,0,1);
-    if(p.ring){
+
+function spawnRing(x, y, color) {
+  if (particles.length >= PARTICLE_CAP) return;
+  particles.push({
+    x, y, vx: 0, vy: 0, life: 20, maxLife: 20,
+    color, r: 0, ring: true, ringR: 0, ringMax: 50
+  });
+}
+
+function spawnTrail(x, y, color) {
+  if (particles.length >= PARTICLE_CAP) return;
+  particles.push({
+    x: x + rand(-2, 2), y: y + rand(-2, 2),
+    vx: rand(-0.3, 0.3), vy: rand(-0.5, 0.5),
+    life: rand(6, 12), maxLife: 12,
+    color, r: rand(1, 2.5), ring: false
+  });
+}
+
+function tickParticles(dt) {
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.life -= dt;
+    if (p.life <= 0) { particles.splice(i, 1); continue; }
+    if (p.ring) { p.ringR += (p.ringMax / p.maxLife) * dt; continue; }
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.vx *= 0.97;
+    p.vy *= 0.97;
+  }
+}
+
+function drawParticles() {
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  for (const p of particles) {
+    const a = clamp(p.life / p.maxLife, 0, 1);
+    if (p.ring) {
       ctx.beginPath();
-      ctx.arc(p.x,p.y,p.ringR,0,Math.PI*2);
-      ctx.strokeStyle=hsl(0,0,100,a*0.5); // use a generic bright
-      try{ctx.strokeStyle=p.color.replace(/[\d.]+\)$/,a*0.5+')');}catch(e){}
-      ctx.lineWidth=2*a;
+      ctx.arc(p.x, p.y, p.ringR, 0, Math.PI * 2);
+      ctx.strokeStyle = p.color.replace(/[\d.]+\)$/, (a * 0.6) + ')');
+      ctx.lineWidth = 2.5 * a;
       ctx.stroke();
-    }else{
-      ctx.globalAlpha=a;
-      ctx.fillStyle=p.color;
+    } else {
+      ctx.globalAlpha = a;
+      ctx.fillStyle = p.color;
       ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r*a,0,Math.PI*2);
+      ctx.arc(p.x, p.y, p.r * (0.3 + 0.7 * a), 0, Math.PI * 2);
       ctx.fill();
-      ctx.globalAlpha=1;
     }
   }
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.restore();
 }
 
-// ═══ PLATFORM ═══
-function makePlat(y,lane,type){
-  return{x:laneX(lane),y,w:laneW(),lane,type:type||'both',scored:false};
+// ════════════════════════════════════════
+// PLATFORM GENERATION
+// ════════════════════════════════════════
+// Platforms are placed in world X coordinates; the camera scrolls left.
+// Each platform has: worldX, lane (0=floor, 1=ceil), safeW, hotW, type ('normal'|'moving'), moveAmp, movePhase, scored, isRisk
+
+let nextPlatWorldX;
+let platIdCounter;
+
+function makePlatform(worldX, lane, d) {
+  const sw = safeWidth(d);
+  const hw = hotWidth(d);
+  const totalW = sw * 2 + hw;
+  const isMoving = d > 0.3 && Math.random() < d * 0.15;
+  const isRisk = d > 0.15 && Math.random() < 0.12;
+
+  return {
+    id: platIdCounter++,
+    worldX,
+    lane,
+    safeW: sw,
+    hotW: hw,
+    totalW,
+    type: isMoving ? 'moving' : 'normal',
+    moveAmp: isMoving ? rand(15, 30 + d * 20) : 0,
+    movePhase: rand(0, Math.PI * 2),
+    moveSpeed: rand(0.015, 0.03),
+    scored: false,
+    isRisk,
+    riskW: isRisk ? clamp(totalW * 0.3, 20, 40) : 0,
+    riskScored: false
+  };
 }
 
-// ═══ GATE ═══
-function makeGate(y,fromLane,toLane,w){
-  const cx=(laneX(fromLane)+laneX(toLane))/2;
-  return{x:cx,y,w:w||GATE_W_BASE,h:30,fromLane,toLane,used:false};
-}
-
-// ═══ DIFFICULTY ═══
-function diff(){return clamp(totalScrolled/6000,0,1)}
-
-// ═══ INIT ═══
-function initGame(){
-  score=0; combo=0; hotEdgeStreak=0;
-  bestScore=loadBest();
-  gravityDir=1;
-  scrollSpeed=SCROLL_BASE;
-  totalScrolled=0;
-  shakeX=0; shakeY=0; shakeMag=0;
-  neonSaves=1;
-  lastSafePlatIdx=-1;
-  nearMissTimer=0; slowMo=false;
-  hueTime=0; vignetteAlpha=0;
-  particles=[];
-  platforms=[];
-  gates=[];
-
-  ball={x:laneX(1),y:H*0.65,vy:0,lane:1,squashT:0,squashAmt:0};
-
-  // Starting platform under the ball
-  const startPlat=makePlat(ball.y+BALL_R+PLAT_H/2,1,'both');
-  platforms.push(startPlat);
-  lastSafePlatIdx=0;
-
-  // Generate platforms above
-  nextPlatScreenY=startPlat.y;
-  for(let i=0;i<15;i++) addPlatAbove();
-}
-
-function addPlatAbove(){
-  const d=diff();
-  const gap=PLAT_GAP_BASE - d*20 + rand(-12,12);
-  const clampedGap=clamp(gap,60,135);
-  nextPlatScreenY-=clampedGap;
-
-  const lane=randInt(0,2);
-  let type='both';
-  if(d>0.25 && Math.random()<d*0.3){
-    type=Math.random()<0.5?'top':'bottom';
+function generatePlatforms() {
+  const d = diff();
+  // Decide lane: alternate with some randomness, prefer requiring flips
+  const prev = platforms.length > 0 ? platforms[platforms.length - 1] : null;
+  let lane;
+  if (!prev) {
+    lane = 0; // start on floor
+  } else {
+    // Higher difficulty = more lane switches
+    const switchChance = 0.35 + d * 0.25;
+    lane = Math.random() < switchChance ? (prev.lane === 0 ? 1 : 0) : prev.lane;
   }
 
-  const p=makePlat(nextPlatScreenY,lane,type);
+  const gap = platGap(d);
+  const p = makePlatform(nextPlatWorldX, lane, d);
   platforms.push(p);
-
-  // Maybe gate between this and previous
-  if(Math.random()<0.35+d*0.2){
-    const others=[0,1,2].filter(l=>l!==lane);
-    const toLane=others[randInt(0,others.length-1)];
-    const gy=nextPlatScreenY+clampedGap*0.45;
-    const gw=Math.max(20,GATE_W_BASE-d*16);
-    gates.push(makeGate(gy,lane,toLane,gw));
-  }
+  nextPlatWorldX += p.totalW + gap;
 }
 
-// ═══ INPUT ═══
-function handleInput(){
-  if(state==='start'){
-    state='playing';
+// ════════════════════════════════════════
+// GAME INIT
+// ════════════════════════════════════════
+function initGame() {
+  score = 0;
+  streak = 0;
+  multiplier = 1;
+  burstMeter = 0;
+  burstMax = 100;
+  bestScore = loadBest();
+  scrollSpeed = SCROLL_BASE;
+  baseScrollSpeed = SCROLL_BASE;
+  totalScrolled = 0;
+  shakeX = 0; shakeY = 0; shakeMag = 0;
+  tetherActive = false;
+  tetherTimer = 0;
+  tetherMaxTimer = 0;
+  hueTime = 0;
+  gameOverCooldown = 0;
+  onFloor = true;
+  particles = [];
+  platforms = [];
+  riskGates = [];
+  platIdCounter = 0;
+
+  // Ball starts centered on the first platform area
+  const startX = W * 0.25;
+  ball = {
+    x: startX,
+    y: floorY() - BALL_R - PLAT_H / 2,
+    vy: 0,
+    squashT: 0,
+    squashAmt: 0,
+    worldX: startX,
+    landed: true,
+    landedPlatId: -1,
+    flipGrace: 0 // grace frames after flip
+  };
+
+  // Camera: worldOffset is how far we've scrolled in world coords
+  ball.worldX = 200;
+
+  // Generate initial platforms
+  nextPlatWorldX = ball.worldX - 50;
+
+  // First platform right under ball
+  const firstPlat = makePlatform(ball.worldX - 30, 0, 0);
+  firstPlat.safeW = trackWidth() * 0.35; // extra wide first
+  firstPlat.hotW = trackWidth() * 0.12;
+  firstPlat.totalW = firstPlat.safeW * 2 + firstPlat.hotW;
+  platforms.push(firstPlat);
+  ball.landedPlatId = firstPlat.id;
+
+  nextPlatWorldX = firstPlat.worldX + firstPlat.totalW + platGap(0);
+
+  // Pre-generate platforms ahead
+  for (let i = 0; i < 12; i++) generatePlatforms();
+}
+
+// ════════════════════════════════════════
+// SCREEN COORDINATES
+// ════════════════════════════════════════
+// The ball stays roughly at a fixed screen X while the world scrolls
+const BALL_SCREEN_X = 0.22; // ratio of W
+
+function worldToScreenX(worldX) {
+  return (worldX - ball.worldX) + W * BALL_SCREEN_X;
+}
+
+function laneToScreenY(lane, platObj, time) {
+  let baseY = lane === 0 ? floorY() : ceilY();
+  if (platObj && platObj.type === 'moving') {
+    baseY += Math.sin(time * platObj.moveSpeed + platObj.movePhase) * platObj.moveAmp;
+  }
+  return baseY;
+}
+
+// ════════════════════════════════════════
+// INPUT
+// ════════════════════════════════════════
+function handleInput() {
+  if (state === 'start') {
+    state = 'playing';
     startScreen.classList.add('hidden');
     hudEl.classList.remove('hidden');
     initGame();
     return;
   }
-  if(state==='gameover'){
-    state='playing';
+  if (state === 'gameover') {
+    if (gameOverCooldown > 0) return;
+    state = 'playing';
     gameoverScreen.classList.add('hidden');
     hudEl.classList.remove('hidden');
     initGame();
     return;
   }
-  if(state==='playing') flipGravity();
-}
-
-function flipGravity(){
-  gravityDir*=-1;
-  ball.vy=gravityDir*1.5;
-
-  // Check if inside a gate → lane shift
-  for(const g of gates){
-    if(g.used)continue;
-    if(ball.x>g.x-g.w/2 && ball.x<g.x+g.w/2 &&
-       ball.y>g.y-g.h/2 && ball.y<g.y+g.h/2){
-      ball.lane=g.toLane;
-      ball.x=laneX(g.toLane);
-      g.used=true;
-      spawnP(ball.x,ball.y,10,hsl(280,100,70,1),3,20);
-      break;
+  if (state === 'playing') {
+    if (tetherActive) {
+      // Tether save!
+      tetherSave();
+    } else {
+      flipGravity();
     }
   }
 }
 
-container.addEventListener('pointerdown',e=>{e.preventDefault();handleInput()});
-document.addEventListener('keydown',e=>{
-  if(e.code==='Space'||e.code==='Enter'){e.preventDefault();handleInput()}
+function flipGravity() {
+  onFloor = !onFloor;
+  // Give initial velocity toward target lane
+  const targetY = onFloor ? floorY() - BALL_R - PLAT_H / 2 : ceilY() + BALL_R + PLAT_H / 2;
+  const dir = targetY > ball.y ? 1 : -1;
+  ball.vy = dir * 3;
+  ball.landed = false;
+  ball.flipGrace = 8;
+
+  // Flip particles
+  spawnP(ball.x, ball.y, 6, hsl((hueTime * 2) % 360, 100, 70, 1), 2, 14);
+}
+
+function tetherSave() {
+  tetherActive = false;
+  // Reset multiplier, reduce burst
+  streak = 0;
+  multiplier = 1;
+  burstMeter = Math.max(0, burstMeter - 30);
+
+  // Snap to nearest platform in the current lane direction
+  ball.landed = false;
+  onFloor = true;
+  ball.vy = 0;
+
+  // Find the nearest upcoming platform on floor lane
+  let bestPlat = null;
+  let bestDist = Infinity;
+  for (const p of platforms) {
+    if (p.lane !== 0) continue;
+    const sx = worldToScreenX(p.worldX + p.totalW / 2);
+    if (sx > 0 && sx < W * 1.5) {
+      const d = Math.abs(p.worldX + p.totalW / 2 - ball.worldX);
+      if (d < bestDist) { bestDist = d; bestPlat = p; }
+    }
+  }
+  if (!bestPlat) {
+    // Try ceiling
+    for (const p of platforms) {
+      if (p.lane !== 1) continue;
+      const sx = worldToScreenX(p.worldX + p.totalW / 2);
+      if (sx > 0 && sx < W * 1.5) {
+        const d = Math.abs(p.worldX + p.totalW / 2 - ball.worldX);
+        if (d < bestDist) { bestDist = d; bestPlat = p; onFloor = false; }
+      }
+    }
+  }
+
+  if (bestPlat) {
+    ball.worldX = bestPlat.worldX + bestPlat.totalW / 2;
+    const sy = laneToScreenY(bestPlat.lane, bestPlat, performance.now() * 0.001);
+    ball.y = bestPlat.lane === 0 ? sy - BALL_R - PLAT_H / 2 : sy + BALL_R + PLAT_H / 2;
+    ball.landed = true;
+    ball.landedPlatId = bestPlat.id;
+    onFloor = bestPlat.lane === 0;
+  } else {
+    ball.y = floorY() - BALL_R - PLAT_H / 2;
+  }
+
+  // Visual feedback
+  spawnP(ball.x, ball.y, 20, hsl(120, 100, 60, 1), 5, 25);
+  spawnRing(ball.x, ball.y, hsl(120, 100, 60, 1));
+  shakeMag = 5;
+}
+
+container.addEventListener('pointerdown', e => { e.preventDefault(); handleInput(); });
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); handleInput(); }
 });
 
-// ═══ COLLISION ═══
-function checkCollisions(dt){
-  for(let i=0;i<platforms.length;i++){
-    const p=platforms[i];
-    if(p.lane!==ball.lane)continue;
-    const hw=p.w/2;
-    if(ball.x<p.x-hw || ball.x>p.x+hw)continue;
+// ════════════════════════════════════════
+// COLLISION
+// ════════════════════════════════════════
+function checkLanding(time) {
+  if (ball.landed) return;
+  if (ball.flipGrace > 0) return; // don't land immediately after flip
 
-    const topSurf=p.y-PLAT_H/2;
-    const botSurf=p.y+PLAT_H/2;
-    const prevY=ball.y-ball.vy*dt;
+  const targetLane = onFloor ? 0 : 1;
 
-    // Falling down → land on top surface
-    if(gravityDir===1 && ball.vy>0 && (p.type==='both'||p.type==='top')){
-      if(prevY+BALL_R<=topSurf+2 && ball.y+BALL_R>=topSurf){
-        return landOn(i,topSurf-BALL_R);
+  for (const p of platforms) {
+    if (p.lane !== targetLane) continue;
+
+    const platScreenX = worldToScreenX(p.worldX);
+    const platScreenEnd = worldToScreenX(p.worldX + p.totalW);
+
+    // Is ball horizontally over this platform?
+    if (ball.x < platScreenX || ball.x > platScreenEnd) continue;
+
+    const platScreenY = laneToScreenY(p.lane, p, time);
+
+    if (targetLane === 0) {
+      // Floor: ball falls down, lands on top
+      const surfaceY = platScreenY - PLAT_H / 2;
+      if (ball.vy > 0 && ball.y + BALL_R >= surfaceY - 3 && ball.y + BALL_R <= surfaceY + 12) {
+        landOnPlatform(p, surfaceY - BALL_R, time);
+        return;
       }
-    }
-    // Rising up → land on bottom surface
-    if(gravityDir===-1 && ball.vy<0 && (p.type==='both'||p.type==='bottom')){
-      if(prevY-BALL_R>=botSurf-2 && ball.y-BALL_R<=botSurf){
-        return landOn(i,botSurf+BALL_R);
+    } else {
+      // Ceiling: ball rises up, lands on bottom
+      const surfaceY = platScreenY + PLAT_H / 2;
+      if (ball.vy < 0 && ball.y - BALL_R <= surfaceY + 3 && ball.y - BALL_R >= surfaceY - 12) {
+        landOnPlatform(p, surfaceY + BALL_R, time);
+        return;
       }
     }
   }
-  return false;
 }
 
-function landOn(platIdx,snapY){
-  const p=platforms[platIdx];
-  const gap=Math.abs(ball.y-snapY);
+function landOnPlatform(plat, snapY, time) {
+  ball.y = snapY;
+  ball.vy = 0;
+  ball.landed = true;
+  ball.landedPlatId = plat.id;
+  ball.squashT = 10;
+  ball.squashAmt = 0.3;
 
-  ball.y=snapY;
-  ball.vy=0;
-  lastSafePlatIdx=platIdx;
+  // Determine where on platform we landed (hot zone check)
+  const platScreenX = worldToScreenX(plat.worldX);
+  const relX = ball.x - platScreenX;
+  const safeLeft = plat.safeW;
+  const hotStart = safeLeft;
+  const hotEnd = safeLeft + plat.hotW;
+  const isHot = relX >= hotStart && relX <= hotEnd;
 
-  // Squash/stretch
-  ball.squashT=10;
-  ball.squashAmt=0.3;
+  if (!plat.scored) {
+    plat.scored = true;
 
-  // Hot edge check
-  const hw=p.w/2;
-  const edgeDist=Math.min(Math.abs(ball.x-(p.x-hw)),Math.abs(ball.x-(p.x+hw)));
-  const isHotEdge=edgeDist<HOT_EDGE_W;
+    if (isHot) {
+      // HOT landing
+      streak++;
+      multiplier = 1 + Math.floor(streak / 3) * 0.5;
+      const pts = Math.round(3 * multiplier);
+      score += pts;
+      burstMeter = Math.min(burstMax, burstMeter + 8 + streak * 2);
 
-  if(!p.scored){
-    p.scored=true;
-    if(isHotEdge){
-      score+=2;
-      combo++;
-      hotEdgeStreak++;
-      if(hotEdgeStreak>=SAVES_STREAK_REQ && neonSaves<1){
-        neonSaves=1;
-        spawnP(ball.x,ball.y,22,hsl(120,100,60,1),5,28);
-        spawnRing(ball.x,ball.y,hsl(120,100,60,1));
+      // Punchy feedback
+      spawnP(ball.x, ball.y, 18, hsl(320, 100, 65, 1), 4, 22);
+      spawnRing(ball.x, ball.y, hsl(320, 100, 70, 1));
+      shakeMag = Math.min(shakeMag + 3, 7);
+
+      // Burst full?
+      if (burstMeter >= burstMax) {
+        triggerBurst();
       }
-      spawnP(ball.x,ball.y,15,hsl(320,100,65,1),4,22);
-      spawnRing(ball.x,ball.y,hsl(320,100,70,1));
-      shakeMag=Math.min(shakeMag+2.5,6);
-    }else{
-      score+=1;
-      combo=0;
-      hotEdgeStreak=0;
-      spawnP(ball.x,ball.y,7,hsl(180,90,60,1),2.5,16);
+    } else {
+      // SAFE landing
+      const pts = Math.max(1, Math.round(1 * multiplier));
+      score += pts;
+      streak = 0;
+      multiplier = 1;
+      spawnP(ball.x, ball.y, 8, hsl(180, 90, 60, 1), 2.5, 16);
+      shakeMag = Math.max(shakeMag, 1.5);
+    }
+
+    // Risk gate bonus
+    if (plat.isRisk && !plat.riskScored && streak >= 2) {
+      plat.riskScored = true;
+      const bonus = Math.round(10 * multiplier);
+      score += bonus;
+      spawnP(ball.x, ball.y, 25, hsl(60, 100, 70, 1), 5, 28);
+      spawnRing(ball.x, ball.y, hsl(60, 100, 70, 1));
+      shakeMag = Math.min(shakeMag + 4, 9);
     }
   }
-
-  // Near-miss slow-mo
-  if(gap>NEAR_MISS_PX && !slowMo){
-    nearMissTimer=NEAR_MISS_MS;
-    slowMo=true;
-  }
-
-  shakeMag=Math.max(shakeMag,1.5);
-  return true;
 }
 
-// ═══ NEON SAVE ═══
-function triggerNeonSave(){
-  if(neonSaves<=0 || lastSafePlatIdx<0 || lastSafePlatIdx>=platforms.length)return false;
-  const sp=platforms[lastSafePlatIdx];
-  if(!sp)return false;
-  neonSaves--;
-  score=Math.max(0,score-3);
-  combo=0;
-  hotEdgeStreak=0;
-  ball.lane=sp.lane;
-  ball.x=laneX(sp.lane);
-  ball.y=sp.y - PLAT_H/2 - BALL_R; // place on top
-  ball.vy=0;
-  gravityDir=1;
-  spawnP(ball.x,ball.y,25,hsl(120,100,55,1),5,30);
-  spawnRing(ball.x,ball.y,hsl(120,100,60,1));
-  vignetteAlpha=0.6;
-  shakeMag=5;
-  return true;
+function triggerBurst() {
+  burstMeter = 0;
+  // Burst bonus: score a bunch of points and spectacular VFX
+  const bonus = Math.round(20 * multiplier);
+  score += bonus;
+  spawnP(ball.x, ball.y, 35, hsl(50, 100, 70, 1), 6, 30);
+  spawnRing(ball.x, ball.y, hsl(50, 100, 80, 1));
+  shakeMag = 10;
+  // Temporary speed boost visual (handled in draw)
 }
 
-// ═══ GAME OVER ═══
-function gameOver(){
-  state='gameover';
-  shakeMag=14;
-  spawnP(ball.x,clamp(ball.y,50,H-50),35,hsl(0,100,60,1),6,35);
-  spawnRing(ball.x,clamp(ball.y,50,H-50),hsl(0,100,60,1));
+// ════════════════════════════════════════
+// GAME OVER
+// ════════════════════════════════════════
+function doGameOver() {
+  state = 'gameover';
+  gameOverCooldown = 30;
+  shakeMag = 15;
+  spawnP(ball.x, clamp(ball.y, 50, H - 50), 40, hsl(0, 100, 60, 1), 6, 35);
+  spawnRing(ball.x, clamp(ball.y, 50, H - 50), hsl(0, 100, 60, 1));
 
-  const isNew=score>bestScore;
-  if(isNew){bestScore=score;saveBest(bestScore)}
+  const isNew = score > bestScore;
+  if (isNew) { bestScore = score; saveBest(bestScore); }
 
   hudEl.classList.add('hidden');
-  goScoreEl.textContent=score;
-  goBestEl.textContent=bestScore;
-  newBestTag.classList.toggle('hidden',!isNew);
+  goScoreEl.textContent = score;
+  goBestEl.textContent = bestScore;
+  newBestTag.classList.toggle('hidden', !isNew);
   gameoverScreen.classList.remove('hidden');
 }
 
-// ═══ SHARE ═══
-shareBtn.addEventListener('click',async()=>{
-  const text=`I scored ${score} in Neon Bounce: Gravity Lanes! Can you beat it?`;
-  const url=window.location.href;
-  if(navigator.share){
-    try{await navigator.share({title:'Neon Bounce',text,url})}catch(e){}
-  }else{
-    try{
-      await navigator.clipboard.writeText(text+' '+url);
-      shareBtn.textContent='Copied!';
-      setTimeout(()=>shareBtn.textContent='Share Score',1500);
-    }catch(e){}
+// ════════════════════════════════════════
+// SHARE
+// ════════════════════════════════════════
+shareBtn.addEventListener('click', async () => {
+  const text = `I scored ${score} in Neon Bounce! Can you beat my score?`;
+  const base = window.location.origin + window.location.pathname;
+  const url = base + '?challenge=' + score;
+  if (navigator.share) {
+    try { await navigator.share({ title: 'Neon Bounce', text, url }); } catch(e) {}
+  } else {
+    try {
+      await navigator.clipboard.writeText(text + ' ' + url);
+      shareBtn.textContent = 'Copied!';
+      setTimeout(() => shareBtn.textContent = 'Share Score', 1500);
+    } catch(e) {
+      // Fallback: select a temporary input
+      const inp = document.createElement('textarea');
+      inp.value = text + ' ' + url;
+      document.body.appendChild(inp);
+      inp.select();
+      document.execCommand('copy');
+      document.body.removeChild(inp);
+      shareBtn.textContent = 'Copied!';
+      setTimeout(() => shareBtn.textContent = 'Share Score', 1500);
+    }
   }
 });
 
-// ═══ SEO TOGGLE ═══
-seoToggle.addEventListener('click',()=>seoContent.classList.toggle('open'));
+// ════════════════════════════════════════
+// SEO TOGGLE
+// ════════════════════════════════════════
+seoToggle.addEventListener('click', () => seoContent.classList.toggle('open'));
 
-// ═══ SHOW BEST ON START ═══
-bestScore=loadBest();
-startBestEl.textContent=bestScore;
+// ════════════════════════════════════════
+// INIT DISPLAY
+// ════════════════════════════════════════
+bestScore = loadBest();
+startBestEl.textContent = bestScore;
+checkChallenge();
 
-// ═══ MAIN LOOP ═══
-let lastTime=performance.now();
+// ════════════════════════════════════════
+// MAIN LOOP
+// ════════════════════════════════════════
+let lastTime = performance.now();
 
-function loop(ts){
+function loop(ts) {
   requestAnimationFrame(loop);
-  let rawDt=ts-lastTime;
-  lastTime=ts;
-  if(rawDt>80)rawDt=16.67; // tab-away guard
-  if(rawDt<=0)return;
+  let rawDt = ts - lastTime;
+  lastTime = ts;
+  if (rawDt > 80) rawDt = 16.67;
+  if (rawDt <= 0) return;
+  const dt = rawDt / 16.67;
+  const time = ts * 0.001;
 
-  if(state!=='playing'){
-    drawBg(ts);
+  hueTime = ts * 0.025;
+
+  if (state !== 'playing') {
+    drawBackground(ts);
+    tickParticles(dt);
+    if (shakeMag > 0.1) {
+      shakeX = rand(-shakeMag, shakeMag);
+      shakeY = rand(-shakeMag, shakeMag);
+      shakeMag *= SHAKE_DECAY;
+    } else { shakeX = 0; shakeY = 0; shakeMag = 0; }
+    // Still draw particles during gameover for dramatic effect
+    if (state === 'gameover') {
+      ctx.save();
+      ctx.setTransform(dpr, 0, 0, dpr, shakeX * dpr, shakeY * dpr);
+      drawParticles();
+      ctx.restore();
+    }
     return;
   }
 
-  // Slow-mo
-  let dtScale=1;
-  if(slowMo){
-    nearMissTimer-=rawDt;
-    if(nearMissTimer<=0){slowMo=false;nearMissTimer=0}
-    else dtScale=0.35;
+  const d = diff();
+  if (gameOverCooldown > 0) gameOverCooldown -= dt;
+
+  // ── Scroll (ball auto-moves forward) ──
+  baseScrollSpeed = SCROLL_BASE + d * 2.8;
+  scrollSpeed = baseScrollSpeed;
+  ball.worldX += scrollSpeed * dt;
+  totalScrolled += scrollSpeed * dt;
+
+  // Ball screen X stays fixed
+  ball.x = W * BALL_SCREEN_X;
+
+  // ── Gravity physics ──
+  if (!ball.landed) {
+    const targetY = onFloor ? floorY() : ceilY();
+    const gDir = targetY > ball.y ? 1 : -1;
+    ball.vy += GRAVITY * gDir * dt;
+    ball.vy = clamp(ball.vy, -MAX_VY, MAX_VY);
+    ball.y += ball.vy * dt;
+  } else {
+    // Stay on platform (follow moving platforms)
+    const lp = platforms.find(p => p.id === ball.landedPlatId);
+    if (lp) {
+      const sy = laneToScreenY(lp.lane, lp, time);
+      if (lp.lane === 0) {
+        ball.y = sy - PLAT_H / 2 - BALL_R;
+      } else {
+        ball.y = sy + PLAT_H / 2 + BALL_R;
+      }
+
+      // Check if ball has scrolled off the platform
+      const platScreenEnd = worldToScreenX(lp.worldX + lp.totalW);
+      if (ball.x > platScreenEnd) {
+        ball.landed = false;
+        ball.landedPlatId = -1;
+        // Start falling
+        ball.vy = onFloor ? 1 : -1;
+      }
+    } else {
+      ball.landed = false;
+      ball.vy = onFloor ? 1 : -1;
+    }
   }
-  const dt=rawDt/16.67*dtScale;
 
-  hueTime=ts*0.02;
-  const d=diff();
-
-  // ── Scroll world down ──
-  scrollSpeed=SCROLL_BASE+d*2.5;
-  const scrollAmt=scrollSpeed*dt;
-  totalScrolled+=scrollAmt;
-
-  // Move platforms & gates & ball down (world scrolls upward = objects go down on screen)
-  for(const p of platforms) p.y+=scrollAmt;
-  for(const g of gates) g.y+=scrollAmt;
-  ball.y+=scrollAmt;
-  nextPlatScreenY+=scrollAmt;
-
-  // ── Ball physics ──
-  ball.vy+=GRAVITY*gravityDir*dt;
-  ball.vy=clamp(ball.vy,-MAX_VY,MAX_VY);
-  ball.y+=ball.vy*dt;
-
-  // Lane snap
-  ball.x=lerp(ball.x,laneX(ball.lane),0.2);
+  // Flip grace countdown
+  if (ball.flipGrace > 0) ball.flipGrace -= dt;
 
   // Squash decay
-  if(ball.squashT>0) ball.squashT-=dt;
+  if (ball.squashT > 0) ball.squashT -= dt;
 
-  // ── Collisions ──
-  checkCollisions(dt);
+  // ── Landing check ──
+  checkLanding(time);
 
-  // ── Off-screen death ──
-  if(ball.y>H+50 || ball.y<-50){
-    if(!triggerNeonSave()) gameOver();
+  // ── Tether / death check ──
+  if (!ball.landed && !tetherActive) {
+    // Check if ball is way off a landing surface
+    const fy = floorY(), cy = ceilY();
+    const offScreen = ball.y > H + 30 || ball.y < -30;
+    const pastLaneSurface = (onFloor && ball.y > fy + 40) || (!onFloor && ball.y < cy - 40);
+
+    if (offScreen || pastLaneSurface) {
+      // Check if there's any platform we could land on nearby
+      let hasPlatformAhead = false;
+      for (const p of platforms) {
+        const sx = worldToScreenX(p.worldX);
+        const sex = worldToScreenX(p.worldX + p.totalW);
+        if (sex > -20 && sx < W * 0.6 && p.lane === (onFloor ? 0 : 1)) {
+          hasPlatformAhead = true;
+          break;
+        }
+      }
+
+      if (!hasPlatformAhead || offScreen) {
+        // Activate tether
+        tetherActive = true;
+        tetherMaxTimer = tetherDuration(d);
+        tetherTimer = tetherMaxTimer;
+        // Freeze ball position at edge
+        ball.vy = 0;
+        ball.y = clamp(ball.y, 10, H - 10);
+      }
+    }
   }
 
-  // ── Cleanup off-screen platforms/gates (below screen) ──
-  // Remove platforms that scrolled far below
-  while(platforms.length>0 && platforms[0].y>H+80){
+  if (tetherActive) {
+    tetherTimer -= dt;
+    // Visual: ball bobs slightly
+    ball.y += Math.sin(ts * 0.01) * 0.5;
+    if (tetherTimer <= 0) {
+      tetherActive = false;
+      doGameOver();
+      return;
+    }
+  }
+
+  // ── Ball trail ──
+  if (Math.random() < 0.6) {
+    const bh = (hueTime * 2) % 360;
+    spawnTrail(ball.x, ball.y, hsl(bh, 90, 65, 0.8));
+  }
+
+  // ── Generate platforms ahead ──
+  const aheadWorldX = ball.worldX + W * 1.5;
+  while (nextPlatWorldX < aheadWorldX) {
+    generatePlatforms();
+  }
+
+  // ── Cleanup old platforms ──
+  while (platforms.length > 0 && worldToScreenX(platforms[0].worldX + platforms[0].totalW) < -100) {
     platforms.shift();
-    if(lastSafePlatIdx>0) lastSafePlatIdx--;
-    else lastSafePlatIdx=0;
-  }
-  gates=gates.filter(g=>g.y<H+80);
-
-  // ── Generate new platforms above ──
-  while(nextPlatScreenY>-100){
-    addPlatAbove();
   }
 
   // ── Particles ──
   tickParticles(dt);
 
   // ── Screen shake ──
-  if(shakeMag>0.1){
-    shakeX=rand(-shakeMag,shakeMag);
-    shakeY=rand(-shakeMag,shakeMag);
-    shakeMag*=SHAKE_DECAY;
-  }else{shakeX=0;shakeY=0;shakeMag=0}
-
-  // ── Vignette decay ──
-  if(vignetteAlpha>0) vignetteAlpha*=0.93;
+  if (shakeMag > 0.1) {
+    shakeX = rand(-shakeMag, shakeMag);
+    shakeY = rand(-shakeMag, shakeMag);
+    shakeMag *= SHAKE_DECAY;
+  } else { shakeX = 0; shakeY = 0; shakeMag = 0; }
 
   // ── HUD ──
-  hudScore.textContent=score;
-  if(combo>0){
-    hudCombo.textContent='COMBO x'+combo;
-    hudCombo.style.opacity='1';
-  }else hudCombo.style.opacity='0';
-
-  hudSave.textContent=neonSaves>0?'\u25CF NEON SAVE':'';
-  hudSave.style.opacity=neonSaves>0?'1':'0';
+  hudScore.textContent = score;
+  if (streak > 0) {
+    hudStreak.textContent = 'STREAK x' + streak;
+    hudStreak.style.opacity = '1';
+  } else {
+    hudStreak.style.opacity = '0';
+  }
+  if (multiplier > 1) {
+    hudMulti.textContent = multiplier.toFixed(1) + 'x';
+    hudMulti.style.opacity = '1';
+  } else {
+    hudMulti.style.opacity = '0';
+  }
+  if (burstMeter > 0) {
+    const pct = Math.round(burstMeter / burstMax * 100);
+    hudBurst.textContent = 'BURST ' + pct + '%';
+    hudBurst.style.opacity = '1';
+  } else {
+    hudBurst.style.opacity = '0';
+  }
 
   // ── DRAW ──
-  draw(ts,d);
+  draw(ts, d, time);
 }
 
-// ═══ DRAW BG (for non-playing states) ═══
-function drawBg(ts){
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  const g=ctx.createLinearGradient(0,0,0,H);
-  g.addColorStop(0,'#08081a');
-  g.addColorStop(1,'#0c0c28');
-  ctx.fillStyle=g;
-  ctx.fillRect(0,0,W,H);
-  // Subtle animated stars
-  for(let i=0;i<40;i++){
-    const sx=(73*i*7+11)%W;
-    const sy=(73*i*13+37)%H;
-    const sa=0.15+0.12*Math.sin((ts||0)*0.001+i*0.7);
-    ctx.fillStyle=`rgba(180,180,255,${sa})`;
-    ctx.fillRect(sx,sy,1.3,1.3);
+// ════════════════════════════════════════
+// DRAW BACKGROUND (non-playing)
+// ════════════════════════════════════════
+function drawBackground(ts) {
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#0b0014');
+  g.addColorStop(0.5, '#0d0020');
+  g.addColorStop(1, '#08000e');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+
+  // Stars
+  for (let i = 0; i < 50; i++) {
+    const sx = (73 * i * 7 + 11) % W;
+    const sy = (73 * i * 13 + 37) % H;
+    const sa = 0.12 + 0.1 * Math.sin((ts || 0) * 0.001 + i * 0.7);
+    const sh = (i * 47 + (ts || 0) * 0.02) % 360;
+    ctx.fillStyle = hsl(sh, 40, 70, sa);
+    ctx.fillRect(sx, sy, 1.2, 1.2);
+  }
+
+  // Subtle neon grid lines
+  ctx.strokeStyle = 'rgba(100, 60, 180, 0.04)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 20; i++) {
+    const y = (i / 20) * H;
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
   }
 }
 
-// ═══ MAIN DRAW ═══
-function draw(ts,d){
+// ════════════════════════════════════════
+// MAIN DRAW
+// ════════════════════════════════════════
+function draw(ts, d, time) {
   ctx.save();
-  ctx.setTransform(dpr,0,0,dpr,shakeX*dpr,shakeY*dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, shakeX * dpr, shakeY * dpr);
 
-  // Background gradient
-  const bgH=240+Math.sin(hueTime*0.08)*8;
-  const g1=ctx.createLinearGradient(0,0,0,H);
-  g1.addColorStop(0,hsl(bgH,22,6));
-  g1.addColorStop(1,hsl(bgH+10,28,10));
-  ctx.fillStyle=g1;
-  ctx.fillRect(-20,-20,W+40,H+40);
+  // Background gradient with HSL cycling
+  const bgH = 270 + Math.sin(hueTime * 0.06) * 15;
+  const g1 = ctx.createLinearGradient(0, 0, 0, H);
+  g1.addColorStop(0, hsl(bgH, 30, 4));
+  g1.addColorStop(0.5, hsl(bgH + 10, 35, 6));
+  g1.addColorStop(1, hsl(bgH - 10, 25, 3));
+  ctx.fillStyle = g1;
+  ctx.fillRect(-20, -20, W + 40, H + 40);
 
-  // Stars with parallax
-  for(let i=0;i<40;i++){
-    const sx=(73*i*7+11)%W;
-    const sy=((73*i*13+37+totalScrolled*0.08*((i%3)+1))%H+H)%H;
-    const sh=(hueTime+i*25)%360;
-    const sa=0.12+0.08*Math.sin(ts*0.0012+i);
-    ctx.fillStyle=hsl(sh,35,70,sa);
-    ctx.fillRect(sx,sy,1.3,1.3);
+  // Parallax stars
+  for (let i = 0; i < 50; i++) {
+    const sx = ((73 * i * 7 + 11 - totalScrolled * 0.05 * ((i % 3) + 1)) % W + W) % W;
+    const sy = (73 * i * 13 + 37) % H;
+    const sh = (hueTime + i * 25) % 360;
+    const sa = 0.1 + 0.08 * Math.sin(ts * 0.001 + i);
+    ctx.fillStyle = hsl(sh, 35, 70, sa);
+    ctx.fillRect(sx, sy, 1.2, 1.2);
   }
 
-  // Lane tint bands
-  for(let i=0;i<LANE_COUNT;i++){
-    const lx=laneX(i);
-    const lw=laneW()*1.1;
-    const lh=(hueTime*0.4+i*120)%360;
-    ctx.fillStyle=hsl(lh,25,50,0.025);
-    ctx.fillRect(lx-lw/2,0,lw,H);
-    // Lane center line (very subtle)
-    ctx.fillStyle=hsl(lh,20,40,0.04);
-    ctx.fillRect(lx-0.5,0,1,H);
-  }
+  // ── Lane guide lines ──
+  const flY = floorY();
+  const ceY = ceilY();
+
+  // Floor lane line
+  ctx.strokeStyle = hsl((hueTime * 0.5) % 360, 30, 30, 0.08);
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, flY); ctx.lineTo(W, flY); ctx.stroke();
+
+  // Ceiling lane line
+  ctx.strokeStyle = hsl((hueTime * 0.5 + 180) % 360, 30, 30, 0.08);
+  ctx.beginPath(); ctx.moveTo(0, ceY); ctx.lineTo(W, ceY); ctx.stroke();
+
+  // Track corridor hint
+  ctx.fillStyle = 'rgba(60, 30, 100, 0.015)';
+  ctx.fillRect(0, ceY - 30, W, flY - ceY + 60);
 
   // ── PLATFORMS ──
-  for(const p of platforms){
-    if(p.y<-40||p.y>H+40)continue;
-    const hw=p.w/2, hh=PLAT_H/2;
-    const ph=(hueTime+p.lane*90)%360;
+  for (const p of platforms) {
+    const screenX = worldToScreenX(p.worldX);
+    const screenEndX = worldToScreenX(p.worldX + p.totalW);
+
+    // Cull off-screen
+    if (screenEndX < -40 || screenX > W + 40) continue;
+
+    const platY = laneToScreenY(p.lane, p, time);
+    const ph = (hueTime + p.lane * 150 + p.id * 30) % 360;
 
     // Platform body
-    ctx.fillStyle=hsl(ph,45,22,0.85);
-    ctx.fillRect(p.x-hw,p.y-hh,p.w,PLAT_H);
+    ctx.fillStyle = hsl(ph, 40, 15, 0.85);
+    ctx.fillRect(screenX, platY - PLAT_H / 2, p.totalW, PLAT_H);
 
-    // Top bright line
-    if(p.type==='both'||p.type==='top'){
-      ctx.fillStyle=hsl(ph,65,55,0.7);
-      ctx.fillRect(p.x-hw,p.y-hh,p.w,2);
+    // SAFE zones (left and right)
+    ctx.fillStyle = hsl(ph, 50, 25, 0.6);
+    ctx.fillRect(screenX, platY - PLAT_H / 2, p.safeW, PLAT_H);
+    ctx.fillRect(screenX + p.safeW + p.hotW, platY - PLAT_H / 2, p.safeW, PLAT_H);
+
+    // HOT zone (center strip) - brighter, pulsing
+    const hotPulse = 0.7 + 0.3 * Math.sin(ts * 0.005 + p.id);
+    const hotH = (ph + 120) % 360;
+    ctx.fillStyle = hsl(hotH, 90, 50 * hotPulse, 0.85);
+    ctx.fillRect(screenX + p.safeW, platY - PLAT_H / 2, p.hotW, PLAT_H);
+
+    // HOT glow
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.fillStyle = hsl(hotH, 100, 60, 0.15 * hotPulse);
+    ctx.fillRect(screenX + p.safeW - 3, platY - PLAT_H / 2 - 3, p.hotW + 6, PLAT_H + 6);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.restore();
+
+    // Top/bottom bright edge
+    const edgeY = p.lane === 0 ? platY - PLAT_H / 2 : platY + PLAT_H / 2 - 2;
+    ctx.fillStyle = hsl(ph, 65, 55, 0.5);
+    ctx.fillRect(screenX, edgeY, p.totalW, 2);
+
+    // RISK indicator
+    if (p.isRisk && !p.riskScored) {
+      const rx = screenX + p.totalW / 2 - p.riskW / 2;
+      const ry = platY - PLAT_H / 2 - 16;
+      const rPulse = 0.5 + 0.5 * Math.sin(ts * 0.008);
+      ctx.fillStyle = hsl(50, 100, 60, 0.7 * rPulse);
+      ctx.fillRect(rx, ry, p.riskW, 6);
+      ctx.fillStyle = hsl(50, 100, 80, 0.3 * rPulse);
+      ctx.font = '8px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('RISK', screenX + p.totalW / 2, ry - 2);
     }
-    // Bottom bright line
-    if(p.type==='both'||p.type==='bottom'){
-      ctx.fillStyle=hsl(ph,65,50,0.5);
-      ctx.fillRect(p.x-hw,p.y+hh-2,p.w,2);
-    }
 
-    // Hot edge strips (left & right)
-    const heh=HOT_EDGE_W;
-    ctx.fillStyle=hsl((ph+120)%360,100,60,0.75);
-    ctx.fillRect(p.x-hw,p.y-hh,heh,PLAT_H);
-    ctx.fillRect(p.x+hw-heh,p.y-hh,heh,PLAT_H);
-
-    // One-sided arrow indicators
-    if(p.type==='top'){
-      ctx.fillStyle=hsl(ph,60,55,0.35);
-      ctx.beginPath();
-      ctx.moveTo(p.x-4,p.y-hh-3);ctx.lineTo(p.x,p.y-hh-7);ctx.lineTo(p.x+4,p.y-hh-3);
-      ctx.fill();
-    }else if(p.type==='bottom'){
-      ctx.fillStyle=hsl(ph,60,55,0.35);
-      ctx.beginPath();
-      ctx.moveTo(p.x-4,p.y+hh+3);ctx.lineTo(p.x,p.y+hh+7);ctx.lineTo(p.x+4,p.y+hh+3);
-      ctx.fill();
+    // Moving platform indicator
+    if (p.type === 'moving') {
+      ctx.fillStyle = hsl(ph, 50, 60, 0.3);
+      const arrowY = p.lane === 0 ? platY + PLAT_H / 2 + 6 : platY - PLAT_H / 2 - 8;
+      ctx.font = '7px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('~', screenX + p.totalW / 2, arrowY);
     }
   }
 
-  // ── GATES ──
-  for(const g of gates){
-    if(g.y<-40||g.y>H+40||g.used)continue;
-    const gh=(hueTime+180)%360;
+  // ── TETHER VISUAL ──
+  if (tetherActive) {
+    const progress = tetherTimer / tetherMaxTimer;
+    const tetherHue = progress > 0.3 ? 120 : 0;
+    const flash = Math.sin(ts * 0.02) * 0.3 + 0.7;
+
+    // Tether line from ball to nearest platform edge
     ctx.save();
-    ctx.strokeStyle=hsl(gh,75,55,0.45);
-    ctx.lineWidth=1.5;
-    ctx.setLineDash([4,3]);
-    ctx.strokeRect(g.x-g.w/2,g.y-g.h/2,g.w,g.h);
-    ctx.setLineDash([]);
-    // Direction arrow
-    const dir=g.toLane>g.fromLane?1:-1;
-    ctx.fillStyle=hsl(gh,80,60,0.5);
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.strokeStyle = hsl(tetherHue, 100, 60, progress * flash * 0.6);
+    ctx.lineWidth = 2 + progress * 2;
+    ctx.setLineDash([4, 4]);
     ctx.beginPath();
-    ctx.moveTo(g.x+dir*10,g.y);
-    ctx.lineTo(g.x-dir*3,g.y-5);
-    ctx.lineTo(g.x-dir*3,g.y+5);
-    ctx.fill();
+    ctx.moveTo(ball.x, ball.y);
+    const targetY = onFloor ? floorY() : ceilY();
+    ctx.lineTo(ball.x + 30, targetY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.globalCompositeOperation = 'source-over';
     ctx.restore();
+
+    // Tether timer bar
+    const barW = 60;
+    const barH = 4;
+    const barX = ball.x - barW / 2;
+    const barY = ball.y - BALL_R - 14;
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fillRect(barX - 1, barY - 1, barW + 2, barH + 2);
+    ctx.fillStyle = hsl(tetherHue, 100, 55, 0.9);
+    ctx.fillRect(barX, barY, barW * progress, barH);
+
+    // TAP! text
+    const tapFlash = Math.sin(ts * 0.015) > 0;
+    if (tapFlash) {
+      ctx.fillStyle = hsl(tetherHue, 100, 80, 0.9);
+      ctx.font = 'bold 12px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('TAP!', ball.x, barY - 5);
+    }
   }
 
   // ── PARTICLES ──
@@ -660,63 +1053,90 @@ function draw(ts,d){
 
   // ── BALL ──
   {
-    const bx=ball.x, by=ball.y;
-    let sx=1,sy=1;
-    if(ball.squashT>0){
-      const t=ball.squashT/10;
-      if(gravityDir===1){sx=1+ball.squashAmt*t; sy=1-ball.squashAmt*t}
-      else{sx=1-ball.squashAmt*t; sy=1+ball.squashAmt*t}
+    const bx = ball.x, by = ball.y;
+    let sx = 1, sy = 1;
+    if (ball.squashT > 0) {
+      const t = ball.squashT / 10;
+      const gDir = onFloor ? 1 : -1;
+      sx = 1 + ball.squashAmt * t;
+      sy = 1 - ball.squashAmt * t * gDir;
     }
-    const bh=(hueTime*1.8)%360;
+    const bh = (hueTime * 2) % 360;
 
     ctx.save();
-    ctx.translate(bx,by);
-    ctx.scale(sx,sy);
+    ctx.translate(bx, by);
+    ctx.scale(sx, sy);
 
-    // Glow (only on ball)
-    ctx.shadowColor=hsl(bh,100,60);
-    ctx.shadowBlur=16;
+    // Outer glow
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    const glowGrad = ctx.createRadialGradient(0, 0, BALL_R * 0.5, 0, 0, BALL_R * 2.5);
+    glowGrad.addColorStop(0, hsl(bh, 100, 60, 0.3));
+    glowGrad.addColorStop(1, hsl(bh, 100, 60, 0));
+    ctx.fillStyle = glowGrad;
+    ctx.fillRect(-BALL_R * 3, -BALL_R * 3, BALL_R * 6, BALL_R * 6);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.restore();
+
+    // Ball body
+    ctx.shadowColor = hsl(bh, 100, 60);
+    ctx.shadowBlur = 18;
     ctx.beginPath();
-    ctx.arc(0,0,BALL_R,0,Math.PI*2);
-    ctx.fillStyle=hsl(bh,85,62);
+    ctx.arc(0, 0, BALL_R, 0, Math.PI * 2);
+    ctx.fillStyle = hsl(bh, 85, 62);
     ctx.fill();
 
     // Inner highlight
-    ctx.shadowBlur=0;
+    ctx.shadowBlur = 0;
     ctx.beginPath();
-    ctx.arc(-2,-2,BALL_R*0.4,0,Math.PI*2);
-    ctx.fillStyle=hsl(bh,50,85,0.35);
+    ctx.arc(-2, -2, BALL_R * 0.35, 0, Math.PI * 2);
+    ctx.fillStyle = hsl(bh, 50, 85, 0.4);
     ctx.fill();
 
-    // Gravity indicator arrow
-    const iy=gravityDir*(-BALL_R-5);
-    ctx.fillStyle=hsl(bh,75,70,0.55);
+    // Gravity indicator
+    const arrowDir = onFloor ? 1 : -1;
+    const iy = arrowDir * (-BALL_R - 5);
+    ctx.fillStyle = hsl(bh, 75, 70, 0.6);
     ctx.beginPath();
-    ctx.moveTo(-3,iy);ctx.lineTo(3,iy);ctx.lineTo(0,iy-gravityDir*5);
+    ctx.moveTo(-3, iy);
+    ctx.lineTo(3, iy);
+    ctx.lineTo(0, iy - arrowDir * 5);
     ctx.fill();
 
     ctx.restore();
   }
 
-  // ── VIGNETTE FLASH ──
-  if(vignetteAlpha>0.01){
-    const vg=ctx.createRadialGradient(W/2,H/2,H*0.15,W/2,H/2,H*0.65);
-    vg.addColorStop(0,'rgba(0,255,100,0)');
-    vg.addColorStop(1,`rgba(0,255,100,${vignetteAlpha})`);
-    ctx.fillStyle=vg;
-    ctx.fillRect(-20,-20,W+40,H+40);
-  }
+  // ── BURST METER BAR (bottom of screen) ──
+  if (burstMeter > 0) {
+    const barW = W * 0.5;
+    const barH = 3;
+    const barX = (W - barW) / 2;
+    const barY = H - 20;
+    const pct = burstMeter / burstMax;
 
-  // Slow-mo overlay
-  if(slowMo){
-    ctx.fillStyle='rgba(0,255,255,0.03)';
-    ctx.fillRect(-20,-20,W+40,H+40);
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.fillRect(barX - 1, barY - 1, barW + 2, barH + 2);
+
+    const burstH = lerp(180, 50, pct);
+    ctx.fillStyle = hsl(burstH, 100, 55, 0.8);
+    ctx.fillRect(barX, barY, barW * pct, barH);
+
+    if (pct > 0.8) {
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.fillStyle = hsl(burstH, 100, 70, 0.15 + 0.1 * Math.sin(ts * 0.01));
+      ctx.fillRect(barX, barY - 2, barW * pct, barH + 4);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.restore();
+    }
   }
 
   ctx.restore();
 }
 
-// ═══ START ═══
+// ════════════════════════════════════════
+// START
+// ════════════════════════════════════════
 requestAnimationFrame(loop);
 
 })();
