@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Neon Bounce: Gravity Lanes – Free Hyper-Casual HTML5 Game</title>
+<meta name="description" content="Neon Bounce: Gravity Lanes – tap to flip gravity, ride platforms through a neon tower. Master hot-edge combos, lane-shift gates, and climb the leaderboard. Play free in your browser!">
+<meta name="theme-color" content="#0a0a1a">
+<meta property="og:title" content="Neon Bounce: Gravity Lanes">
+<meta property="og:description" content="Tap to flip gravity and bounce through a neon tower. Free hyper-casual HTML5 game.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://balinti.github.io/neon-bounce/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🟢</text></svg>">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#06060f;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:#e0e0f0}
+#container{position:relative;width:100%;max-width:420px;height:100vh;height:100dvh;margin:0 auto;overflow:hidden;touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+canvas{display:block;width:100%;height:100%}
+.overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;pointer-events:auto;transition:opacity .3s}
+.overlay.hidden{opacity:0;pointer-events:none}
+#startScreen{background:linear-gradient(180deg,rgba(6,6,15,.95),rgba(10,10,30,.98))}
+#gameoverScreen{background:rgba(6,6,15,.92)}
+.title{font-size:2rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(135deg,#0ff,#f0f,#ff0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-shadow:none;margin-bottom:.3em}
+.subtitle{font-size:.85rem;color:#889;margin-bottom:2em;letter-spacing:1px}
+.tap-prompt{font-size:1.1rem;color:#aab;animation:pulse 1.6s ease-in-out infinite;cursor:pointer;padding:1em 2em}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.best-label{font-size:.8rem;color:#667;text-transform:uppercase;letter-spacing:2px}
+.best-score{font-size:1.3rem;color:#88f;margin-bottom:1.5em}
+.go-score{font-size:4rem;font-weight:900;background:linear-gradient(135deg,#0ff,#f0f);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.go-label{font-size:.75rem;color:#556;text-transform:uppercase;letter-spacing:3px;margin-top:2em}
+.go-best{font-size:1.1rem;color:#88f;margin:.5em 0 1.5em}
+.new-best{color:#ff0;font-size:.7rem;text-transform:uppercase;letter-spacing:2px;animation:pulse 1s ease-in-out infinite}
+.share-btn{background:linear-gradient(135deg,#2a2a4a,#1a1a3a);border:1px solid rgba(255,255,255,.1);color:#aaf;padding:.6em 1.8em;border-radius:2em;font-size:.85rem;cursor:pointer;margin-bottom:1.5em;transition:background .2s}
+.share-btn:hover{background:linear-gradient(135deg,#3a3a5a,#2a2a4a)}
+#hud{position:absolute;top:0;left:0;right:0;padding:12px 16px;display:flex;justify-content:space-between;align-items:flex-start;z-index:5;pointer-events:none}
+#hudScore{font-size:1.6rem;font-weight:800;color:#fff;text-shadow:0 0 10px rgba(0,255,255,.3)}
+#hudCombo{font-size:.75rem;color:#f0f;text-transform:uppercase;letter-spacing:1px;opacity:0;transition:opacity .2s}
+#hudSave{font-size:.65rem;color:#0f0;letter-spacing:1px;opacity:0;transition:opacity .2s}
+.seo-footer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:420px;width:100%;z-index:2;overflow:hidden}
+.seo-toggle{display:block;width:100%;background:rgba(10,10,20,.8);border:none;border-top:1px solid rgba(255,255,255,.05);color:#445;font-size:.6rem;padding:4px;cursor:pointer;text-align:center;letter-spacing:1px}
+.seo-content{max-height:0;overflow:hidden;background:rgba(10,10,20,.95);transition:max-height .3s;font-size:.65rem;color:#556;line-height:1.5;padding:0 12px}
+.seo-content.open{max-height:200px;padding:8px 12px}
+</style>
+</head>
+<body>
+<div id="container">
+  <canvas id="gc"></canvas>
+  <div id="hud" class="hidden">
+    <div><div id="hudScore">0</div><div id="hudCombo"></div></div>
+    <div id="hudSave"></div>
+  </div>
+  <div id="startScreen" class="overlay">
+    <div class="title">Neon Bounce</div>
+    <div class="subtitle">Gravity Lanes</div>
+    <div class="best-label">Best Score</div>
+    <div class="best-score" id="startBest">0</div>
+    <div class="tap-prompt" id="startBtn">Tap to Start</div>
+  </div>
+  <div id="gameoverScreen" class="overlay hidden">
+    <div class="go-label">Score</div>
+    <div class="go-score" id="goScore">0</div>
+    <div id="newBestTag" class="new-best hidden">New Best!</div>
+    <div class="go-label">Best</div>
+    <div class="go-best" id="goBest">0</div>
+    <button class="share-btn" id="shareBtn">Share Score</button>
+    <div class="tap-prompt" id="retryBtn">Tap to Retry</div>
+  </div>
+</div>
+<div class="seo-footer">
+  <button class="seo-toggle" id="seoToggle">About This Game &#9662;</button>
+  <div class="seo-content" id="seoContent">
+    <p><strong>Neon Bounce: Gravity Lanes</strong> is a free hyper-casual HTML5 game. Tap or press Space to flip gravity and guide your ball through a neon tower. Land on platforms to score points. Hit the glowing hot-edge strips on each platform edge for bonus points and combo multipliers. Use gates between platforms to shift between the three lanes. You start with one Neon Save that auto-teleports you to safety if you miss a platform. Earn another save by landing 8 hot-edge landings in a row. Difficulty increases as you climb higher. Controls: Tap screen or press Space/Enter. Works on mobile and desktop browsers.</p>
+  </div>
+</div>
+<script>
+'use strict';
+(()=>{
+
+// ═══ CONSTANTS ═══
+const LS_KEY='neonBounce_best';
+const LANE_COUNT=3;
+const BALL_R=10;
+const GRAVITY=0.32;
+const MAX_VY=8;
+const PLAT_H=10;
+const HOT_EDGE_W=7;
+const GATE_W_BASE=40;
+const SCROLL_BASE=1.4;
+const PLAT_GAP_BASE=105;
+const PARTICLE_CAP=150;
+const SHAKE_DECAY=0.86;
+const NEAR_MISS_PX=5;
+const NEAR_MISS_MS=120;
+const SAVES_STREAK_REQ=8;
+
+// ═══ DOM ═══
+const canvas=document.getElementById('gc');
+const ctx=canvas.getContext('2d');
+const container=document.getElementById('container');
+const startScreen=document.getElementById('startScreen');
+const gameoverScreen=document.getElementById('gameoverScreen');
+const hudEl=document.getElementById('hud');
+const hudScore=document.getElementById('hudScore');
+const hudCombo=document.getElementById('hudCombo');
+const hudSave=document.getElementById('hudSave');
+const startBestEl=document.getElementById('startBest');
+const goScoreEl=document.getElementById('goScore');
+const goBestEl=document.getElementById('goBest');
+const newBestTag=document.getElementById('newBestTag');
+const shareBtn=document.getElementById('shareBtn');
+const seoToggle=document.getElementById('seoToggle');
+const seoContent=document.getElementById('seoContent');
+
+// ═══ STATE ═══
+let W,H,dpr;
+let state='start';
+let score,bestScore,combo,hotEdgeStreak;
+let ball,platforms,gates,particles;
+let scrollSpeed,totalScrolled;
+let gravityDir; // 1=down, -1=up
+let shakeX,shakeY,shakeMag;
+let neonSaves,lastSafePlatIdx;
+let nearMissTimer,slowMo;
+let hueTime,vignetteAlpha;
+let nextPlatScreenY; // screen-space Y for next platform to spawn
+
+// ═══ SIZING ═══
+function resize(){
+  const r=container.getBoundingClientRect();
+  dpr=Math.min(window.devicePixelRatio||1,3);
+  W=r.width; H=r.height;
+  canvas.width=W*dpr;
+  canvas.height=H*dpr;
+  canvas.style.width=W+'px';
+  canvas.style.height=H+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+window.addEventListener('resize',resize);
+resize();
+
+// ═══ HELPERS ═══
+function laneX(l){return W*(l+1)/(LANE_COUNT+1)}
+function laneW(){return W/(LANE_COUNT+1)*0.72}
+function clamp(v,a,b){return v<a?a:v>b?b:v}
+function lerp(a,b,t){return a+(b-a)*t}
+function rand(a,b){return a+Math.random()*(b-a)}
+function randInt(a,b){return Math.floor(rand(a,b+1))}
+function hsl(h,s,l,a){return a!==undefined?`hsla(${h|0},${s|0}%,${l|0}%,${a})`:`hsl(${h|0},${s|0}%,${l|0}%)`}
+
+// ═══ LOCAL STORAGE ═══
+function loadBest(){try{return parseInt(localStorage.getItem(LS_KEY))||0}catch(e){return 0}}
+function saveBest(s){try{localStorage.setItem(LS_KEY,String(s))}catch(e){}}
+
+// ═══ PARTICLES ═══
+function spawnP(x,y,n,color,spd,life){
+  for(let i=0;i<n&&particles.length<PARTICLE_CAP;i++){
+    const a=rand(0,Math.PI*2),sp=rand(0.5,spd);
+    particles.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,
+      life:rand(life*.5,life),maxLife:life,color,r:rand(1.5,3.5),ring:false});
+  }
+}
+function spawnRing(x,y,color){
+  if(particles.length>=PARTICLE_CAP)return;
+  particles.push({x,y,vx:0,vy:0,life:18,maxLife:18,color,r:0,ring:true,ringR:0,ringMax:55});
+}
+function tickParticles(dt){
+  for(let i=particles.length-1;i>=0;i--){
+    const p=particles[i];
+    p.life-=dt;
+    if(p.life<=0){particles.splice(i,1);continue}
+    if(p.ring){p.ringR+=(p.ringMax/p.maxLife)*dt;continue}
+    p.x+=p.vx*dt; p.y+=p.vy*dt;
+    p.vx*=0.96; p.vy*=0.96;
+  }
+}
+function drawParticles(){
+  for(const p of particles){
+    const a=clamp(p.life/p.maxLife,0,1);
+    if(p.ring){
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.ringR,0,Math.PI*2);
+      ctx.strokeStyle=hsl(0,0,100,a*0.5); // use a generic bright
+      try{ctx.strokeStyle=p.color.replace(/[\d.]+\)$/,a*0.5+')');}catch(e){}
+      ctx.lineWidth=2*a;
+      ctx.stroke();
+    }else{
+      ctx.globalAlpha=a;
+      ctx.fillStyle=p.color;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r*a,0,Math.PI*2);
+      ctx.fill();
+      ctx.globalAlpha=1;
+    }
+  }
+}
+
+// ═══ PLATFORM ═══
+function makePlat(y,lane,type){
+  return{x:laneX(lane),y,w:laneW(),lane,type:type||'both',scored:false};
+}
+
+// ═══ GATE ═══
+function makeGate(y,fromLane,toLane,w){
+  const cx=(laneX(fromLane)+laneX(toLane))/2;
+  return{x:cx,y,w:w||GATE_W_BASE,h:30,fromLane,toLane,used:false};
+}
+
+// ═══ DIFFICULTY ═══
+function diff(){return clamp(totalScrolled/6000,0,1)}
+
+// ═══ INIT ═══
+function initGame(){
+  score=0; combo=0; hotEdgeStreak=0;
+  bestScore=loadBest();
+  gravityDir=1;
+  scrollSpeed=SCROLL_BASE;
+  totalScrolled=0;
+  shakeX=0; shakeY=0; shakeMag=0;
+  neonSaves=1;
+  lastSafePlatIdx=-1;
+  nearMissTimer=0; slowMo=false;
+  hueTime=0; vignetteAlpha=0;
+  particles=[];
+  platforms=[];
+  gates=[];
+
+  ball={x:laneX(1),y:H*0.65,vy:0,lane:1,squashT:0,squashAmt:0};
+
+  // Starting platform under the ball
+  const startPlat=makePlat(ball.y+BALL_R+PLAT_H/2,1,'both');
+  platforms.push(startPlat);
+  lastSafePlatIdx=0;
+
+  // Generate platforms above
+  nextPlatScreenY=startPlat.y;
+  for(let i=0;i<15;i++) addPlatAbove();
+}
+
+function addPlatAbove(){
+  const d=diff();
+  const gap=PLAT_GAP_BASE - d*20 + rand(-12,12);
+  const clampedGap=clamp(gap,60,135);
+  nextPlatScreenY-=clampedGap;
+
+  const lane=randInt(0,2);
+  let type='both';
+  if(d>0.25 && Math.random()<d*0.3){
+    type=Math.random()<0.5?'top':'bottom';
+  }
+
+  const p=makePlat(nextPlatScreenY,lane,type);
+  platforms.push(p);
+
+  // Maybe gate between this and previous
+  if(Math.random()<0.35+d*0.2){
+    const others=[0,1,2].filter(l=>l!==lane);
+    const toLane=others[randInt(0,others.length-1)];
+    const gy=nextPlatScreenY+clampedGap*0.45;
+    const gw=Math.max(20,GATE_W_BASE-d*16);
+    gates.push(makeGate(gy,lane,toLane,gw));
+  }
+}
+
+// ═══ INPUT ═══
+function handleInput(){
+  if(state==='start'){
+    state='playing';
+    startScreen.classList.add('hidden');
+    hudEl.classList.remove('hidden');
+    initGame();
+    return;
+  }
+  if(state==='gameover'){
+    state='playing';
+    gameoverScreen.classList.add('hidden');
+    hudEl.classList.remove('hidden');
+    initGame();
+    return;
+  }
+  if(state==='playing') flipGravity();
+}
+
+function flipGravity(){
+  gravityDir*=-1;
+  ball.vy=gravityDir*1.5;
+
+  // Check if inside a gate → lane shift
+  for(const g of gates){
+    if(g.used)continue;
+    if(ball.x>g.x-g.w/2 && ball.x<g.x+g.w/2 &&
+       ball.y>g.y-g.h/2 && ball.y<g.y+g.h/2){
+      ball.lane=g.toLane;
+      ball.x=laneX(g.toLane);
+      g.used=true;
+      spawnP(ball.x,ball.y,10,hsl(280,100,70,1),3,20);
+      break;
+    }
+  }
+}
+
+container.addEventListener('pointerdown',e=>{e.preventDefault();handleInput()});
+document.addEventListener('keydown',e=>{
+  if(e.code==='Space'||e.code==='Enter'){e.preventDefault();handleInput()}
+});
+
+// ═══ COLLISION ═══
+function checkCollisions(dt){
+  for(let i=0;i<platforms.length;i++){
+    const p=platforms[i];
+    if(p.lane!==ball.lane)continue;
+    const hw=p.w/2;
+    if(ball.x<p.x-hw || ball.x>p.x+hw)continue;
+
+    const topSurf=p.y-PLAT_H/2;
+    const botSurf=p.y+PLAT_H/2;
+    const prevY=ball.y-ball.vy*dt;
+
+    // Falling down → land on top surface
+    if(gravityDir===1 && ball.vy>0 && (p.type==='both'||p.type==='top')){
+      if(prevY+BALL_R<=topSurf+2 && ball.y+BALL_R>=topSurf){
+        return landOn(i,topSurf-BALL_R);
+      }
+    }
+    // Rising up → land on bottom surface
+    if(gravityDir===-1 && ball.vy<0 && (p.type==='both'||p.type==='bottom')){
+      if(prevY-BALL_R>=botSurf-2 && ball.y-BALL_R<=botSurf){
+        return landOn(i,botSurf+BALL_R);
+      }
+    }
+  }
+  return false;
+}
+
+function landOn(platIdx,snapY){
+  const p=platforms[platIdx];
+  const gap=Math.abs(ball.y-snapY);
+
+  ball.y=snapY;
+  ball.vy=0;
+  lastSafePlatIdx=platIdx;
+
+  // Squash/stretch
+  ball.squashT=10;
+  ball.squashAmt=0.3;
+
+  // Hot edge check
+  const hw=p.w/2;
+  const edgeDist=Math.min(Math.abs(ball.x-(p.x-hw)),Math.abs(ball.x-(p.x+hw)));
+  const isHotEdge=edgeDist<HOT_EDGE_W;
+
+  if(!p.scored){
+    p.scored=true;
+    if(isHotEdge){
+      score+=2;
+      combo++;
+      hotEdgeStreak++;
+      if(hotEdgeStreak>=SAVES_STREAK_REQ && neonSaves<1){
+        neonSaves=1;
+        spawnP(ball.x,ball.y,22,hsl(120,100,60,1),5,28);
+        spawnRing(ball.x,ball.y,hsl(120,100,60,1));
+      }
+      spawnP(ball.x,ball.y,15,hsl(320,100,65,1),4,22);
+      spawnRing(ball.x,ball.y,hsl(320,100,70,1));
+      shakeMag=Math.min(shakeMag+2.5,6);
+    }else{
+      score+=1;
+      combo=0;
+      hotEdgeStreak=0;
+      spawnP(ball.x,ball.y,7,hsl(180,90,60,1),2.5,16);
+    }
+  }
+
+  // Near-miss slow-mo
+  if(gap>NEAR_MISS_PX && !slowMo){
+    nearMissTimer=NEAR_MISS_MS;
+    slowMo=true;
+  }
+
+  shakeMag=Math.max(shakeMag,1.5);
+  return true;
+}
+
+// ═══ NEON SAVE ═══
+function triggerNeonSave(){
+  if(neonSaves<=0 || lastSafePlatIdx<0 || lastSafePlatIdx>=platforms.length)return false;
+  const sp=platforms[lastSafePlatIdx];
+  if(!sp)return false;
+  neonSaves--;
+  score=Math.max(0,score-3);
+  combo=0;
+  hotEdgeStreak=0;
+  ball.lane=sp.lane;
+  ball.x=laneX(sp.lane);
+  ball.y=sp.y - PLAT_H/2 - BALL_R; // place on top
+  ball.vy=0;
+  gravityDir=1;
+  spawnP(ball.x,ball.y,25,hsl(120,100,55,1),5,30);
+  spawnRing(ball.x,ball.y,hsl(120,100,60,1));
+  vignetteAlpha=0.6;
+  shakeMag=5;
+  return true;
+}
+
+// ═══ GAME OVER ═══
+function gameOver(){
+  state='gameover';
+  shakeMag=14;
+  spawnP(ball.x,clamp(ball.y,50,H-50),35,hsl(0,100,60,1),6,35);
+  spawnRing(ball.x,clamp(ball.y,50,H-50),hsl(0,100,60,1));
+
+  const isNew=score>bestScore;
+  if(isNew){bestScore=score;saveBest(bestScore)}
+
+  hudEl.classList.add('hidden');
+  goScoreEl.textContent=score;
+  goBestEl.textContent=bestScore;
+  newBestTag.classList.toggle('hidden',!isNew);
+  gameoverScreen.classList.remove('hidden');
+}
+
+// ═══ SHARE ═══
+shareBtn.addEventListener('click',async()=>{
+  const text=`I scored ${score} in Neon Bounce: Gravity Lanes! Can you beat it?`;
+  const url=window.location.href;
+  if(navigator.share){
+    try{await navigator.share({title:'Neon Bounce',text,url})}catch(e){}
+  }else{
+    try{
+      await navigator.clipboard.writeText(text+' '+url);
+      shareBtn.textContent='Copied!';
+      setTimeout(()=>shareBtn.textContent='Share Score',1500);
+    }catch(e){}
+  }
+});
+
+// ═══ SEO TOGGLE ═══
+seoToggle.addEventListener('click',()=>seoContent.classList.toggle('open'));
+
+// ═══ SHOW BEST ON START ═══
+bestScore=loadBest();
+startBestEl.textContent=bestScore;
+
+// ═══ MAIN LOOP ═══
+let lastTime=performance.now();
+
+function loop(ts){
+  requestAnimationFrame(loop);
+  let rawDt=ts-lastTime;
+  lastTime=ts;
+  if(rawDt>80)rawDt=16.67; // tab-away guard
+  if(rawDt<=0)return;
+
+  if(state!=='playing'){
+    drawBg(ts);
+    return;
+  }
+
+  // Slow-mo
+  let dtScale=1;
+  if(slowMo){
+    nearMissTimer-=rawDt;
+    if(nearMissTimer<=0){slowMo=false;nearMissTimer=0}
+    else dtScale=0.35;
+  }
+  const dt=rawDt/16.67*dtScale;
+
+  hueTime=ts*0.02;
+  const d=diff();
+
+  // ── Scroll world down ──
+  scrollSpeed=SCROLL_BASE+d*2.5;
+  const scrollAmt=scrollSpeed*dt;
+  totalScrolled+=scrollAmt;
+
+  // Move platforms & gates & ball down (world scrolls upward = objects go down on screen)
+  for(const p of platforms) p.y+=scrollAmt;
+  for(const g of gates) g.y+=scrollAmt;
+  ball.y+=scrollAmt;
+  nextPlatScreenY+=scrollAmt;
+
+  // ── Ball physics ──
+  ball.vy+=GRAVITY*gravityDir*dt;
+  ball.vy=clamp(ball.vy,-MAX_VY,MAX_VY);
+  ball.y+=ball.vy*dt;
+
+  // Lane snap
+  ball.x=lerp(ball.x,laneX(ball.lane),0.2);
+
+  // Squash decay
+  if(ball.squashT>0) ball.squashT-=dt;
+
+  // ── Collisions ──
+  checkCollisions(dt);
+
+  // ── Off-screen death ──
+  if(ball.y>H+50 || ball.y<-50){
+    if(!triggerNeonSave()) gameOver();
+  }
+
+  // ── Cleanup off-screen platforms/gates (below screen) ──
+  // Remove platforms that scrolled far below
+  while(platforms.length>0 && platforms[0].y>H+80){
+    platforms.shift();
+    if(lastSafePlatIdx>0) lastSafePlatIdx--;
+    else lastSafePlatIdx=0;
+  }
+  gates=gates.filter(g=>g.y<H+80);
+
+  // ── Generate new platforms above ──
+  while(nextPlatScreenY>-100){
+    addPlatAbove();
+  }
+
+  // ── Particles ──
+  tickParticles(dt);
+
+  // ── Screen shake ──
+  if(shakeMag>0.1){
+    shakeX=rand(-shakeMag,shakeMag);
+    shakeY=rand(-shakeMag,shakeMag);
+    shakeMag*=SHAKE_DECAY;
+  }else{shakeX=0;shakeY=0;shakeMag=0}
+
+  // ── Vignette decay ──
+  if(vignetteAlpha>0) vignetteAlpha*=0.93;
+
+  // ── HUD ──
+  hudScore.textContent=score;
+  if(combo>0){
+    hudCombo.textContent='COMBO x'+combo;
+    hudCombo.style.opacity='1';
+  }else hudCombo.style.opacity='0';
+
+  hudSave.textContent=neonSaves>0?'\u25CF NEON SAVE':'';
+  hudSave.style.opacity=neonSaves>0?'1':'0';
+
+  // ── DRAW ──
+  draw(ts,d);
+}
+
+// ═══ DRAW BG (for non-playing states) ═══
+function drawBg(ts){
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#08081a');
+  g.addColorStop(1,'#0c0c28');
+  ctx.fillStyle=g;
+  ctx.fillRect(0,0,W,H);
+  // Subtle animated stars
+  for(let i=0;i<40;i++){
+    const sx=(73*i*7+11)%W;
+    const sy=(73*i*13+37)%H;
+    const sa=0.15+0.12*Math.sin((ts||0)*0.001+i*0.7);
+    ctx.fillStyle=`rgba(180,180,255,${sa})`;
+    ctx.fillRect(sx,sy,1.3,1.3);
+  }
+}
+
+// ═══ MAIN DRAW ═══
+function draw(ts,d){
+  ctx.save();
+  ctx.setTransform(dpr,0,0,dpr,shakeX*dpr,shakeY*dpr);
+
+  // Background gradient
+  const bgH=240+Math.sin(hueTime*0.08)*8;
+  const g1=ctx.createLinearGradient(0,0,0,H);
+  g1.addColorStop(0,hsl(bgH,22,6));
+  g1.addColorStop(1,hsl(bgH+10,28,10));
+  ctx.fillStyle=g1;
+  ctx.fillRect(-20,-20,W+40,H+40);
+
+  // Stars with parallax
+  for(let i=0;i<40;i++){
+    const sx=(73*i*7+11)%W;
+    const sy=((73*i*13+37+totalScrolled*0.08*((i%3)+1))%H+H)%H;
+    const sh=(hueTime+i*25)%360;
+    const sa=0.12+0.08*Math.sin(ts*0.0012+i);
+    ctx.fillStyle=hsl(sh,35,70,sa);
+    ctx.fillRect(sx,sy,1.3,1.3);
+  }
+
+  // Lane tint bands
+  for(let i=0;i<LANE_COUNT;i++){
+    const lx=laneX(i);
+    const lw=laneW()*1.1;
+    const lh=(hueTime*0.4+i*120)%360;
+    ctx.fillStyle=hsl(lh,25,50,0.025);
+    ctx.fillRect(lx-lw/2,0,lw,H);
+    // Lane center line (very subtle)
+    ctx.fillStyle=hsl(lh,20,40,0.04);
+    ctx.fillRect(lx-0.5,0,1,H);
+  }
+
+  // ── PLATFORMS ──
+  for(const p of platforms){
+    if(p.y<-40||p.y>H+40)continue;
+    const hw=p.w/2, hh=PLAT_H/2;
+    const ph=(hueTime+p.lane*90)%360;
+
+    // Platform body
+    ctx.fillStyle=hsl(ph,45,22,0.85);
+    ctx.fillRect(p.x-hw,p.y-hh,p.w,PLAT_H);
+
+    // Top bright line
+    if(p.type==='both'||p.type==='top'){
+      ctx.fillStyle=hsl(ph,65,55,0.7);
+      ctx.fillRect(p.x-hw,p.y-hh,p.w,2);
+    }
+    // Bottom bright line
+    if(p.type==='both'||p.type==='bottom'){
+      ctx.fillStyle=hsl(ph,65,50,0.5);
+      ctx.fillRect(p.x-hw,p.y+hh-2,p.w,2);
+    }
+
+    // Hot edge strips (left & right)
+    const heh=HOT_EDGE_W;
+    ctx.fillStyle=hsl((ph+120)%360,100,60,0.75);
+    ctx.fillRect(p.x-hw,p.y-hh,heh,PLAT_H);
+    ctx.fillRect(p.x+hw-heh,p.y-hh,heh,PLAT_H);
+
+    // One-sided arrow indicators
+    if(p.type==='top'){
+      ctx.fillStyle=hsl(ph,60,55,0.35);
+      ctx.beginPath();
+      ctx.moveTo(p.x-4,p.y-hh-3);ctx.lineTo(p.x,p.y-hh-7);ctx.lineTo(p.x+4,p.y-hh-3);
+      ctx.fill();
+    }else if(p.type==='bottom'){
+      ctx.fillStyle=hsl(ph,60,55,0.35);
+      ctx.beginPath();
+      ctx.moveTo(p.x-4,p.y+hh+3);ctx.lineTo(p.x,p.y+hh+7);ctx.lineTo(p.x+4,p.y+hh+3);
+      ctx.fill();
+    }
+  }
+
+  // ── GATES ──
+  for(const g of gates){
+    if(g.y<-40||g.y>H+40||g.used)continue;
+    const gh=(hueTime+180)%360;
+    ctx.save();
+    ctx.strokeStyle=hsl(gh,75,55,0.45);
+    ctx.lineWidth=1.5;
+    ctx.setLineDash([4,3]);
+    ctx.strokeRect(g.x-g.w/2,g.y-g.h/2,g.w,g.h);
+    ctx.setLineDash([]);
+    // Direction arrow
+    const dir=g.toLane>g.fromLane?1:-1;
+    ctx.fillStyle=hsl(gh,80,60,0.5);
+    ctx.beginPath();
+    ctx.moveTo(g.x+dir*10,g.y);
+    ctx.lineTo(g.x-dir*3,g.y-5);
+    ctx.lineTo(g.x-dir*3,g.y+5);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // ── PARTICLES ──
+  drawParticles();
+
+  // ── BALL ──
+  {
+    const bx=ball.x, by=ball.y;
+    let sx=1,sy=1;
+    if(ball.squashT>0){
+      const t=ball.squashT/10;
+      if(gravityDir===1){sx=1+ball.squashAmt*t; sy=1-ball.squashAmt*t}
+      else{sx=1-ball.squashAmt*t; sy=1+ball.squashAmt*t}
+    }
+    const bh=(hueTime*1.8)%360;
+
+    ctx.save();
+    ctx.translate(bx,by);
+    ctx.scale(sx,sy);
+
+    // Glow (only on ball)
+    ctx.shadowColor=hsl(bh,100,60);
+    ctx.shadowBlur=16;
+    ctx.beginPath();
+    ctx.arc(0,0,BALL_R,0,Math.PI*2);
+    ctx.fillStyle=hsl(bh,85,62);
+    ctx.fill();
+
+    // Inner highlight
+    ctx.shadowBlur=0;
+    ctx.beginPath();
+    ctx.arc(-2,-2,BALL_R*0.4,0,Math.PI*2);
+    ctx.fillStyle=hsl(bh,50,85,0.35);
+    ctx.fill();
+
+    // Gravity indicator arrow
+    const iy=gravityDir*(-BALL_R-5);
+    ctx.fillStyle=hsl(bh,75,70,0.55);
+    ctx.beginPath();
+    ctx.moveTo(-3,iy);ctx.lineTo(3,iy);ctx.lineTo(0,iy-gravityDir*5);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  // ── VIGNETTE FLASH ──
+  if(vignetteAlpha>0.01){
+    const vg=ctx.createRadialGradient(W/2,H/2,H*0.15,W/2,H/2,H*0.65);
+    vg.addColorStop(0,'rgba(0,255,100,0)');
+    vg.addColorStop(1,`rgba(0,255,100,${vignetteAlpha})`);
+    ctx.fillStyle=vg;
+    ctx.fillRect(-20,-20,W+40,H+40);
+  }
+
+  // Slow-mo overlay
+  if(slowMo){
+    ctx.fillStyle='rgba(0,255,255,0.03)';
+    ctx.fillRect(-20,-20,W+40,H+40);
+  }
+
+  ctx.restore();
+}
+
+// ═══ START ═══
+requestAnimationFrame(loop);
+
+})();
+</script>
+</body>
+</html>
