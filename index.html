@@ -2,517 +2,770 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Neon Bounce - Free HTML5 Game</title>
 <meta name="description" content="Play Neon Bounce - Tap to bounce a glowing ball between neon platforms. Miss a platform and fall into the void. Platforms get narrower as score increases.">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0a0014">
-<meta property="og:title" content="Neon Bounce - Free HTML5 Game">
-<meta property="og:description" content="Tap to flip gravity and bounce between neon platforms in this hyper-casual HTML5 game.">
+<link rel="canonical" href="https://balinti.github.io/neon-bounce/">
 <meta property="og:type" content="website">
+<meta property="og:title" content="Neon Bounce - Free HTML5 Game">
+<meta property="og:description" content="Tap to flip gravity and land on neon platforms in this hyper-casual arcade game. How far can you go?">
 <meta property="og:url" content="https://balinti.github.io/neon-bounce/">
-<meta property="og:image" content="https://balinti.github.io/neon-bounce/og.png">
+<meta property="og:image" content="https://balinti.github.io/neon-bounce/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Neon Bounce - Free HTML5 Game">
+<meta name="twitter:description" content="Tap to flip gravity and land on neon platforms in this hyper-casual arcade game.">
+<meta name="twitter:image" content="https://balinti.github.io/neon-bounce/og-image.png">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4099346100621490" crossorigin="anonymous"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#0a0014;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:#fff;touch-action:none;user-select:none;-webkit-user-select:none}
-#wrap{position:relative;max-width:420px;max-height:750px;width:100%;height:100vh;margin:0 auto;overflow:hidden}
-canvas{display:block;width:100%;height:100%}
-#ui{position:absolute;top:0;left:0;width:100%;pointer-events:none;padding:12px 16px;display:flex;justify-content:space-between;align-items:flex-start;z-index:2}
-.pill{background:rgba(0,0,0,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:4px 14px;font-size:14px;font-weight:600;letter-spacing:.5px;line-height:1.4}
-.pill .label{font-size:10px;text-transform:uppercase;opacity:.6;letter-spacing:1px}
-.pill .val{font-variant-numeric:tabular-nums}
-#combo-pill{position:absolute;top:12px;left:50%;transform:translateX(-50%);opacity:0;transition:opacity .2s}
-#combo-pill.show{opacity:1}
-#combo-pill .val{color:#ffdd57}
-.overlay{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3;pointer-events:auto;background:rgba(6,0,12,.7);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;transition:opacity .3s}
-.overlay.show{opacity:1}
-.overlay.hide{pointer-events:none}
-.overlay h1{font-size:32px;font-weight:800;letter-spacing:2px;margin-bottom:6px;text-shadow:0 0 30px rgba(180,100,255,.6)}
-.overlay .sub{font-size:14px;opacity:.55;margin-bottom:32px}
-.overlay .score-big{font-size:56px;font-weight:800;margin-bottom:4px}
-.overlay .best-line{font-size:15px;opacity:.6;margin-bottom:28px}
-.overlay .prompt{font-size:16px;opacity:.7;animation:pulse 1.6s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
-.floor-c{color:#ffb347}.ceil-c{color:#b388ff}
+html,body{width:100%;height:100%;overflow-x:hidden;background:#0a0014;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+#wrap{max-width:420px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
+#gameCanvas{display:block;width:100%;max-height:750px;cursor:pointer;border-radius:4px}
+#seo{max-width:420px;width:100%;margin:12px auto 24px;padding:10px 16px;color:#8a7aaa;font-size:11.5px;line-height:1.6}
+#seo h2{font-size:13px;color:#b8a0e0;margin-bottom:5px}
+#seo p{margin-bottom:7px}
+#seo details{margin-top:6px}
+#seo summary{cursor:pointer;color:#b8a0e0;font-size:12px;margin-bottom:4px}
+#seo dt{font-weight:600;color:#a090c0;margin-top:5px}
+#seo dd{margin-left:0;margin-bottom:2px}
 </style>
 </head>
 <body>
 <div id="wrap">
-  <canvas id="c"></canvas>
-  <div id="ui">
-    <div class="pill"><div class="label">Score</div><div class="val" id="score-val">0</div></div>
-    <div class="pill" id="combo-pill"><div class="label">Combo</div><div class="val" id="combo-val">x1</div></div>
-    <div class="pill"><div class="label">Best</div><div class="val" id="best-val">0</div></div>
-  </div>
-  <div class="overlay show" id="start-overlay">
-    <h1>NEON <span class="floor-c">POLARITY</span> BOUNCE</h1>
-    <div class="sub">Flip gravity &middot; Land on pads &middot; Don't fall</div>
-    <div class="prompt">Tap to Start</div>
-  </div>
-  <div class="overlay hide" id="over-overlay">
-    <div style="font-size:14px;opacity:.5;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px">Game Over</div>
-    <div class="score-big" id="final-score">0</div>
-    <div class="best-line">Best: <span id="final-best">0</span></div>
-    <div class="prompt">Tap to Retry</div>
-  </div>
+<canvas id="gameCanvas"></canvas>
 </div>
-
-<div style="position:absolute;left:-9999px;top:0" aria-hidden="false">
-  <h1>Neon Bounce - Free HTML5 Game</h1>
-  <p>Play Neon Bounce, a hyper-casual HTML5 game. Tap to flip gravity and bounce a glowing ball between neon platforms in a vibrant tunnel. Land on floor and ceiling pads, build combos with perfect landings, collect coins, and survive as platforms get narrower and faster. No download required — play instantly in your browser.</p>
-  <p>Features: polarity gravity flip, combo multiplier, perfect landings, fragile and sliding platforms, pulse pads, coin gates, particle effects, HSL color cycling, screen shake, localStorage high scores.</p>
+<div id="seo">
+<h2>Neon Bounce &mdash; Neon Flip Rally</h2>
+<p>Neon Bounce is a fast-paced hyper-casual arcade game built entirely in HTML5 Canvas. Your glowing ball races through a neon tunnel that scrolls endlessly to the left. Tap the screen or press Space to flip gravity, switching between the floor and ceiling lanes. Land on incoming pads to score points and keep going. Miss a pad and you plummet into the void.</p>
+<p>Two pad types keep things interesting: safe pads are wider and award standard points, while hot pads are thinner, pulse with energy, and grant bonus points plus a combo boost. Every pad has a center sweet spot &mdash; land precisely on it to trigger a &ldquo;Perfect&rdquo; bonus, build your combo multiplier (up to x8), and charge your Void Save shield. When your shield is ready, it rescues you from a single fall with a dramatic slow-motion save effect.</p>
+<p>Difficulty scales smoothly with your score. Speed increases, gaps between pads tighten, hot pads appear more often, and after score 70 you may encounter wobble pads that oscillate vertically. Your high score is saved automatically in your browser so you can always challenge your personal best.</p>
+<details>
+<summary>FAQ &amp; Controls</summary>
+<dl>
+<dt>How do I play?</dt><dd>Tap the screen, or press Space or Enter, to flip gravity. Land on pads to score.</dd>
+<dt>What are hot pads?</dt><dd>Thinner orange pads that pulse with light. They give bonus points and boost your combo multiplier faster.</dd>
+<dt>What is Void Save?</dt><dd>A shield earned by landing five Perfects. If you fall, the shield triggers a slow-mo rescue.</dd>
+<dt>Does it work on mobile?</dt><dd>Yes. The game is fully responsive and touch-friendly. No app download needed.</dd>
+<dt>Is it free?</dt><dd>Completely free, no ads interrupting gameplay, no install. Just open and play.</dd>
+</dl>
+</details>
 </div>
 
 <script>
 'use strict';
 (()=>{
-const canvas=document.getElementById('c');
-const ctx=canvas.getContext('2d');
-const wrap=document.getElementById('wrap');
-const scoreEl=document.getElementById('score-val');
-const bestEl=document.getElementById('best-val');
-const comboEl=document.getElementById('combo-val');
-const comboPill=document.getElementById('combo-pill');
-const startOv=document.getElementById('start-overlay');
-const overOv=document.getElementById('over-overlay');
-const finalScoreEl=document.getElementById('final-score');
-const finalBestEl=document.getElementById('final-best');
 
-const LS_KEY='neonbounce_best';
-let best=parseInt(localStorage.getItem(LS_KEY))||0;
-bestEl.textContent=best;
+/* ═══════════════════════════════════════════
+   Canvas & DPR
+   ═══════════════════════════════════════════ */
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 
-let W,H,dpr;
-function resize(){
-  const r=wrap.getBoundingClientRect();
-  dpr=Math.min(window.devicePixelRatio||1,2.5);
-  W=r.width; H=r.height;
-  canvas.width=W*dpr; canvas.height=H*dpr;
-  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+const DPR = Math.min(window.devicePixelRatio || 1, 2);
+let W, H, S;
+
+function resize() {
+  const maxW = 420, maxH = 750;
+  const vw = Math.min(window.innerWidth, maxW);
+  const vh = Math.min(window.innerHeight, maxH);
+  W = vw; H = vh;
+  S = W / 420;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  canvas.width = W * DPR;
+  canvas.height = H * DPR;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 }
-window.addEventListener('resize',resize);
 resize();
+window.addEventListener('resize', resize);
 
-/* ---- constants ---- */
-const FLOOR_Y=()=>H*0.82;
-const CEIL_Y=()=>H*0.18;
-const BALL_R=10;
-const GRAVITY=1800;
-const FLIP_VEL=520;
-const MAGNET_DIST=22;
-const PERFECT_HALF=14;
+/* ═══════════════════════════════════════════
+   Tuning Constants
+   ═══════════════════════════════════════════ */
+const BALL_X_RATIO = 0.28;
+const BALL_R       = 10;
+const LANE_MARGIN  = 40;
+const GRAVITY      = 1800;
+const FLIP_IMPULSE = 530;
 
-const COL_FLOOR='#ffb347';
-const COL_CEIL='#b388ff';
-const COL_COIN='#ffdd57';
-const COL_PERFECT='#00e5ff';
+const BASE_SCROLL  = 155;
+const MAX_SCROLL   = 330;
+const BASE_GAP     = 155;
+const MIN_GAP      = 82;
 
-/* ---- state ---- */
-let state='start';
-let score,combo,multiplier,scrollX,speed,elapsed;
-let ball,pads,coins,particles,streaks;
-let shakeX=0,shakeY=0,shakeDur=0,shakeT=0;
-let hue=0;
-let lastTime=0;
+const HOT_BASE_P   = 0.14;
+const HOT_MAX_P    = 0.38;
+const LANE_SWITCH_P= 0.38;
 
-/* ---- helpers ---- */
-function getSpacing(){
-  const diff=Math.min(elapsed/120,1);
-  return 155 - diff*55 + Math.random()*35;
-}
-function getPadWidth(){
-  const diff=Math.min(elapsed/150,1);
-  return 78 - diff*36 + Math.random()*14;
-}
-function getSpeed(){return 180+Math.min(elapsed/1.2,230)}
+const WOBBLE_SCORE = 70;
+const WOBBLE_AMP   = 7;
+const WOBBLE_FREQ  = 3.2;
 
-function makePad(x,lane,w,type){
-  const diff=Math.min(elapsed/100,1);
-  if(!type){
-    const r=Math.random();
-    if(r<.08*diff) type='fragile';
-    else if(r<.08*diff+.14*diff) type='pulse';
-    else if(r<.08*diff+.14*diff+.2*diff) type='slide';
-    else type='static';
-  }
-  const h=8;
-  const baseY=lane==='floor'?FLOOR_Y():CEIL_Y();
-  return{
-    x, lane, w:w||getPadWidth(), h, baseY, y:baseY,
-    type, alive:true, opacity:1,
-    slideAmp:type==='slide'?25+Math.random()*28:0,
-    slideSpd:type==='slide'?1.5+Math.random()*1.5:0,
-    slideT:Math.random()*6.28,
-    pulseT:Math.random()*6.28,
-    pulseSpd:type==='pulse'?2+Math.random()*2:0,
-    fragHits:0, cracking:false, crackT:0
+const PERFECT_ZONE = 0.24;   // fraction of half-width
+const SKIN_W       = 7;      // forgiving collision skin px
+
+const MAX_MULTI    = 8;
+const PERFECTS_FOR_SAVE = 5;
+const SAVE_SLOWMO  = 0.4;
+
+const TRAIL_N      = 20;
+const MAX_PARTS    = 140;
+
+const SHAKE_DIE    = 10;
+const SHAKE_PERF   = 3.5;
+const SHAKE_SAVE   = 4;
+
+/* ═══════════════════════════════════════════
+   Game States
+   ═══════════════════════════════════════════ */
+const ST = { START: 0, PLAY: 1, OVER: 2 };
+let state = ST.START;
+
+/* ═══════════════════════════════════════════
+   Variables
+   ═══════════════════════════════════════════ */
+let score, best, combo, maxCombo, multi;
+let saveCharges, saveMeter;
+let hue, time, dt, lastTS;
+let ballX, ballY, ballVY, onLane, grounded;
+let pads, particles, trail;
+let shakeX, shakeY, shakeMag, shakeTmr;
+let slowMo, slowTmr, vignette;
+let popAlpha, popText;
+let bgScroll;
+let shareBR;                // share-button rect
+
+best = parseInt(localStorage.getItem('nb_best')) || 0;
+
+/* ═══════════════════════════════════════════
+   Helpers
+   ═══════════════════════════════════════════ */
+const lerp  = (a,b,t) => a + (b - a) * t;
+const clamp = (v,lo,hi) => v < lo ? lo : v > hi ? hi : v;
+const rand  = (a,b) => a + Math.random() * (b - a);
+
+/* ═══════════════════════════════════════════
+   Pad Factory
+   ═══════════════════════════════════════════ */
+function makePad(x, floor, hot, wobble) {
+  const w = hot ? rand(46, 56) * S : rand(70, 90) * S;
+  return {
+    x, floor, hot, wobble,
+    w, h: 8 * S,
+    wPhase: Math.random() * Math.PI * 2,
+    scored: false
   };
 }
-function makeCoin(x,lane){
-  const y=lane==='floor'?FLOOR_Y()-35-Math.random()*30:CEIL_Y()+35+Math.random()*30;
-  return{x,y,r:8,alive:true,t:Math.random()*6.28};
+
+function padY(p) {
+  let y = p.floor ? H - LANE_MARGIN * S : LANE_MARGIN * S - p.h;
+  if (p.wobble) y += Math.sin(time * WOBBLE_FREQ + p.wPhase) * WOBBLE_AMP * S;
+  return y;
 }
 
-function addParticles(x,y,col,n,vm,life){
-  for(let i=0;i<n;i++){
-    const a=Math.random()*6.2832;
-    const sp=(30+Math.random()*120)*(vm||1);
-    particles.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,
-      life:life||(.4+Math.random()*.5),ml:life||(.4+Math.random()*.5),
-      r:2+Math.random()*3,col});
+/* ═══════════════════════════════════════════
+   Difficulty Curves
+   ═══════════════════════════════════════════ */
+const scrollSpd = () => clamp(BASE_SCROLL + score * 2.1, BASE_SCROLL, MAX_SCROLL);
+const gapDist   = () => clamp(BASE_GAP - score * 0.65, MIN_GAP, BASE_GAP) * S;
+const hotProb   = () => clamp(HOT_BASE_P + score * 0.003, HOT_BASE_P, HOT_MAX_P);
+
+/* ═══════════════════════════════════════════
+   Particles
+   ═══════════════════════════════════════════ */
+function emitP(x, y, n, h, spread, spd) {
+  for (let i = 0; i < n && particles.length < MAX_PARTS; i++) {
+    const a = rand(0, Math.PI * 2);
+    const v = rand(spd * 0.25, spd);
+    particles.push({
+      x, y,
+      vx: Math.cos(a) * v * spread,
+      vy: Math.sin(a) * v,
+      life: 1, decay: rand(1.3, 2.8),
+      r: rand(1.5, 5) * S,
+      h: h + rand(-25, 25),
+      s: rand(70, 100), l: rand(50, 80)
+    });
   }
 }
 
-function triggerShake(d,m){shakeDur=d;shakeT=0;shakeX=(Math.random()-.5)*m;shakeY=(Math.random()-.5)*m}
+/* ═══════════════════════════════════════════
+   Screen Shake
+   ═══════════════════════════════════════════ */
+function shake(mag, dur) { shakeMag = mag; shakeTmr = dur || 0.3; }
 
-function updateUI(){
-  scoreEl.textContent=score;
-  if(score>best){best=score;localStorage.setItem(LS_KEY,best)}
-  bestEl.textContent=best;
-  if(combo>1){comboEl.textContent='x'+multiplier;comboPill.classList.add('show')}
-  else comboPill.classList.remove('show');
-}
+/* ═══════════════════════════════════════════
+   Init / Reset
+   ═══════════════════════════════════════════ */
+function init() {
+  score = 0; combo = 0; maxCombo = 0; multi = 1;
+  saveCharges = 0; saveMeter = 0;
+  ballX = W * BALL_X_RATIO;
+  onLane = true;          // true = floor
+  ballY = H - LANE_MARGIN * S - BALL_R * S;
+  ballVY = 0; grounded = true;
+  pads = []; particles = []; trail = [];
+  shakeX = 0; shakeY = 0; shakeMag = 0; shakeTmr = 0;
+  slowMo = false; slowTmr = 0; vignette = 0;
+  popAlpha = 0; popText = '';
+  bgScroll = 0;
+  shareBR = { x: 0, y: 0, w: 0, h: 0 };
 
-function perfectZone(p){
-  let pw=PERFECT_HALF;
-  if(p.type==='pulse') pw=PERFECT_HALF*(1+.6*Math.sin(p.pulseT));
-  return Math.max(4,pw);
-}
-
-/* ---- init ---- */
-function initGame(){
-  score=0;combo=0;multiplier=1;scrollX=0;speed=180;elapsed=0;hue=0;
-  shakeX=0;shakeY=0;shakeDur=0;shakeT=0;
-  ball={x:W*.22,y:FLOOR_Y()-BALL_R,vy:0,lane:'floor',on:true,trail:[]};
-  pads=[];coins=[];particles=[];streaks=[];
-  // seed
-  for(let i=0;i<10;i++){
-    const lane=i%2===0?'floor':'ceil';
-    pads.push(makePad(W*.45+i*140,lane,78,'static'));
+  // seed pads
+  let px = W * 0.45;
+  let lastF = true;
+  for (let i = 0; i < 9; i++) {
+    const isF = i === 0 ? true : (Math.random() < LANE_SWITCH_P ? !lastF : lastF);
+    pads.push(makePad(px, isF, false, false));
+    lastF = isF;
+    px += rand(BASE_GAP * 0.65, BASE_GAP) * S;
   }
-  updateUI();
 }
 
-/* ---- spawn ---- */
-function spawnAhead(){
-  let mx=0;
-  for(const p of pads) if(p.x>mx) mx=p.x;
-  const vr=scrollX+W+300;
-  while(mx<vr+500){
-    mx+=getSpacing();
-    const lane=Math.random()<.5?'floor':'ceil';
-    pads.push(makePad(mx,lane));
-    if(Math.random()<.3){
-      coins.push(makeCoin(mx,lane==='floor'?'ceil':'floor'));
+/* ═══════════════════════════════════════════
+   Input
+   ═══════════════════════════════════════════ */
+function doFlip() {
+  if (state === ST.START)  { state = ST.PLAY; init(); return; }
+  if (state === ST.OVER)   { state = ST.PLAY; init(); return; }
+  if (state === ST.PLAY) {
+    onLane = !onLane;
+    grounded = false;
+    ballVY = onLane ? FLIP_IMPULSE : -FLIP_IMPULSE;
+  }
+}
+
+function ptrHandler(e) {
+  e.preventDefault();
+  if (state === ST.OVER) {
+    const r = canvas.getBoundingClientRect();
+    const mx = (e.clientX - r.left) * (W / r.width);
+    const my = (e.clientY - r.top)  * (H / r.height);
+    if (mx >= shareBR.x && mx <= shareBR.x + shareBR.w &&
+        my >= shareBR.y && my <= shareBR.y + shareBR.h) {
+      shareScore(); return;
     }
   }
+  doFlip();
 }
-
-/* ---- gameplay ---- */
-function flipGravity(){
-  const target=ball.lane==='floor'?'ceil':'floor';
-  ball.lane=target;
-  ball.on=false;
-  ball.vy=target==='ceil'?-FLIP_VEL:FLIP_VEL;
-}
-
-function landOn(pad,perf){
-  ball.on=true;
-  ball.vy=0;
-  ball.y=pad.lane==='floor'?pad.y-BALL_R:pad.y+pad.h+BALL_R;
-  let pts=1;
-  if(perf){
-    combo++;
-    multiplier=1+Math.floor(combo/3);
-    pts=2*multiplier;
-    addParticles(ball.x,ball.y,COL_PERFECT,14,1.3,.6);
-    triggerShake(.08,3);
-  } else {
-    combo=0;multiplier=1;
-  }
-  score+=pts;
-  addParticles(ball.x,ball.y,pad.lane==='floor'?COL_FLOOR:COL_CEIL,8,.8);
-  updateUI();
-  if(pad.type==='fragile'){
-    pad.fragHits++;
-    if(pad.fragHits>=1){pad.cracking=true;pad.crackT=.28}
-  }
-}
-
-function die(){
-  state='gameover';
-  addParticles(ball.x,ball.y,'#ff3366',45,2,.9);
-  triggerShake(.4,14);
-  finalScoreEl.textContent=score;
-  finalBestEl.textContent=best;
-  overOv.classList.add('show');overOv.classList.remove('hide');
-}
-
-function startGame(){
-  initGame();state='playing';
-  startOv.classList.remove('show');startOv.classList.add('hide');
-  overOv.classList.remove('show');overOv.classList.add('hide');
-  lastTime=performance.now();
-}
-
-/* ---- input ---- */
-function onInput(){
-  if(state==='start'){startGame();return}
-  if(state==='gameover'){startGame();return}
-  if(state==='playing') flipGravity();
-}
-window.addEventListener('pointerdown',onInput);
-window.addEventListener('keydown',e=>{
-  if(e.code==='Space'||e.code==='Enter'){e.preventDefault();onInput()}
+canvas.addEventListener('pointerdown', ptrHandler);
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); doFlip(); }
 });
 
-/* ---- update ---- */
-function update(dt){
-  if(state!=='playing') return;
-  elapsed+=dt;
-  speed=getSpeed();
-  hue=(hue+dt*30)%360;
+/* ═══════════════════════════════════════════
+   Void Save
+   ═══════════════════════════════════════════ */
+function tryVoidSave() {
+  if (saveCharges <= 0) return false;
+  saveCharges--;
+  slowMo = true; slowTmr = SAVE_SLOWMO; vignette = 1;
 
-  scrollX+=speed*dt;
+  // snap to nearest pad
+  let best2 = null, bd = Infinity;
+  for (const p of pads) {
+    const py = padY(p);
+    const cx = p.x + p.w / 2;
+    const d = Math.abs(cx - ballX) + Math.abs(py - ballY) * 0.4;
+    if (d < bd) { bd = d; best2 = p; }
+  }
+  if (best2) {
+    const py = padY(best2);
+    ballX = clamp(ballX, best2.x + 2, best2.x + best2.w - 2);
+    onLane = best2.floor;
+    ballY = best2.floor ? py - BALL_R * S : py + best2.h + BALL_R * S;
+    ballVY = 0; grounded = true;
+  } else {
+    onLane = !onLane;
+    ballY = onLane ? H - LANE_MARGIN * S - BALL_R * S : LANE_MARGIN * S + BALL_R * S;
+    ballVY = 0; grounded = true;
+  }
+  emitP(ballX, ballY, 28, 185, 2, 210);
+  shake(SHAKE_SAVE, 0.3);
+  popAlpha = 1; popText = 'SAVED!';
+  return true;
+}
 
-  // streaks
-  if(Math.random()<dt*8) streaks.push({x:W+Math.random()*50,y:Math.random()*H,
-    len:40+Math.random()*80,spd:200+Math.random()*300,
-    a:.08+Math.random()*.12,h:Math.random()*360});
-  for(let i=streaks.length-1;i>=0;i--){
-    streaks[i].x-=streaks[i].spd*dt;
-    if(streaks[i].x+streaks[i].len<0) streaks.splice(i,1);
+/* ═══════════════════════════════════════════
+   Collision
+   ═══════════════════════════════════════════ */
+function collisions() {
+  const br = BALL_R * S;
+  for (const p of pads) {
+    if (p.scored) continue;
+    const py = padY(p);
+    const inX = ballX + br > p.x - SKIN_W * S && ballX - br < p.x + p.w + SKIN_W * S;
+    if (!inX) continue;
+
+    let landed = false;
+    if (p.floor) {
+      if (onLane && ballVY >= 0 && !grounded) {
+        const top = py;
+        if (ballY + br >= top - SKIN_W * S && ballY + br <= top + 12 * S) {
+          ballY = top - br; ballVY = 0; grounded = true; landed = true;
+        }
+      }
+    } else {
+      if (!onLane && ballVY <= 0 && !grounded) {
+        const bot = py + p.h;
+        if (ballY - br <= bot + SKIN_W * S && ballY - br >= bot - 12 * S) {
+          ballY = bot + br; ballVY = 0; grounded = true; landed = true;
+        }
+      }
+    }
+
+    if (landed) {
+      p.scored = true;
+      let pts = p.hot ? 3 : 1;
+
+      // perfect check
+      const cx = p.x + p.w / 2;
+      const dist = Math.abs(ballX - cx) / (p.w / 2);
+      const perf = dist < PERFECT_ZONE;
+
+      if (perf) {
+        combo++; if (combo > maxCombo) maxCombo = combo;
+        multi = clamp(1 + Math.floor(combo / 3), 1, MAX_MULTI);
+        pts += 2;
+        saveMeter++;
+        if (saveMeter >= PERFECTS_FOR_SAVE) {
+          saveMeter = 0;
+          if (saveCharges < 5) saveCharges++;
+        }
+        popAlpha = 1; popText = 'PERFECT!';
+        emitP(ballX, ballY, 16, hue, 1.6, 190);
+        shake(SHAKE_PERF, 0.15);
+      } else {
+        if (combo > 0) combo = Math.max(0, combo - 1);
+        multi = clamp(1 + Math.floor(combo / 3), 1, MAX_MULTI);
+      }
+
+      score += pts * multi;
+      emitP(ballX, ballY, 8, p.hot ? 30 : hue, 1, 120);
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════
+   Game Over
+   ═══════════════════════════════════════════ */
+function gameOver() {
+  state = ST.OVER;
+  if (score > best) { best = score; localStorage.setItem('nb_best', best); }
+  shake(SHAKE_DIE, 0.5);
+  emitP(ballX, ballY, 45, 0, 2.2, 260);
+}
+
+/* ═══════════════════════════════════════════
+   Share
+   ═══════════════════════════════════════════ */
+function shareScore() {
+  const t = `Neon Bounce \u2014 Neon Flip Rally\nScore: ${score} | Best: ${best} | Max Combo: ${maxCombo}\nhttps://balinti.github.io/neon-bounce/`;
+  if (navigator.share) {
+    navigator.share({ title: 'Neon Bounce', text: t }).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(t).then(() => { popAlpha = 1; popText = 'Copied!'; }).catch(() => {});
+  }
+}
+
+/* ═══════════════════════════════════════════
+   UPDATE
+   ═══════════════════════════════════════════ */
+function update() {
+  const rawDt = dt;
+  const eDt = slowMo ? dt * 0.28 : dt;
+  time += eDt;
+  hue = (hue + 32 * eDt) % 360;
+
+  if (state !== ST.PLAY) return;
+
+  const spd = scrollSpd();
+  bgScroll += spd * eDt;
+
+  // slow-mo
+  if (slowMo) {
+    slowTmr -= rawDt;
+    vignette = clamp(slowTmr / SAVE_SLOWMO, 0, 1);
+    if (slowTmr <= 0) { slowMo = false; vignette = 0; }
   }
 
-  // ball physics
-  const gDir=ball.lane==='floor'?1:-1;
-  if(!ball.on){
-    ball.vy+=GRAVITY*gDir*dt;
-    ball.y+=ball.vy*dt;
+  // gravity
+  if (!grounded) {
+    const gDir = onLane ? 1 : -1;
+    ballVY += gDir * GRAVITY * eDt;
+    ballY += ballVY * eDt;
+  }
 
-    for(const p of pads){
-      if(!p.alive) continue;
-      const px=p.x-scrollX;
-      if(ball.x<px-p.w/2-MAGNET_DIST||ball.x>px+p.w/2+MAGNET_DIST) continue;
-      if(p.lane==='floor'&&ball.lane==='floor'){
-        const sy=p.y-BALL_R;
-        if(ball.vy>0&&ball.y>=sy-MAGNET_DIST&&ball.y<=sy+10){
-          ball.y=sy;
-          const isPerfect=Math.abs(ball.x-px)<perfectZone(p);
-          landOn(p,isPerfect);break;
-        }
-      }
-      if(p.lane==='ceil'&&ball.lane==='ceil'){
-        const sy=p.y+p.h+BALL_R;
-        if(ball.vy<0&&ball.y<=sy+MAGNET_DIST&&ball.y>=sy-10){
-          ball.y=sy;
-          const isPerfect=Math.abs(ball.x-px)<perfectZone(p);
-          landOn(p,isPerfect);break;
-        }
+  // clamp to lane edges (safety net when grounded)
+  const floorY = H - LANE_MARGIN * S - BALL_R * S;
+  const ceilY  = LANE_MARGIN * S + BALL_R * S;
+  if (grounded && onLane  && ballY > floorY) ballY = floorY;
+  if (grounded && !onLane && ballY < ceilY)  ballY = ceilY;
+
+  // scroll pads
+  for (const p of pads) p.x -= spd * eDt * S;
+
+  // cull & spawn
+  pads = pads.filter(p => p.x + p.w > -60 * S);
+  while (pads.length < 12) {
+    const last = pads[pads.length - 1];
+    const gap = gapDist();
+    const nx = last ? last.x + last.w + gap : W + gap;
+    const lastF = last ? last.floor : true;
+    const isF = Math.random() < LANE_SWITCH_P ? !lastF : lastF;
+    const isH = Math.random() < hotProb();
+    const wob = score >= WOBBLE_SCORE && Math.random() < 0.22;
+    pads.push(makePad(nx, isF, isH, wob));
+  }
+
+  // collision
+  collisions();
+
+  // check if ball is on a pad still (grounded tracking for moving/wobble pads)
+  if (grounded) {
+    let onAny = false;
+    const br = BALL_R * S;
+    for (const p of pads) {
+      if (ballX + br > p.x && ballX - br < p.x + p.w && p.floor === onLane) {
+        // update Y to follow wobble
+        const py = padY(p);
+        ballY = p.floor ? py - br : py + p.h + br;
+        onAny = true; break;
       }
     }
-    if(ball.y>H+60||ball.y<-60){die();return}
-  } else {
-    let onPad=false;
-    for(const p of pads){
-      if(!p.alive) continue;
-      const px=p.x-scrollX;
-      if(ball.x>=px-p.w/2-4&&ball.x<=px+p.w/2+4&&p.lane===ball.lane){
-        onPad=true;
-        ball.y=p.lane==='floor'?p.y-BALL_R:p.y+p.h+BALL_R;
-        break;
-      }
-    }
-    if(!onPad){ball.on=false;ball.vy=0}
+    if (!onAny) { grounded = false; ballVY = 0; }
+  }
+
+  // void check
+  if (ballY > H + 40 * S || ballY < -40 * S) {
+    if (!tryVoidSave()) gameOver();
   }
 
   // trail
-  ball.trail.unshift({x:ball.x,y:ball.y,a:1});
-  if(ball.trail.length>20) ball.trail.pop();
-  for(const t of ball.trail) t.a*=.87;
-
-  // pads update
-  for(let i=pads.length-1;i>=0;i--){
-    const p=pads[i];
-    if(p.type==='slide'&&p.alive){p.slideT+=p.slideSpd*dt;p.y=p.baseY+Math.sin(p.slideT)*p.slideAmp}
-    if(p.type==='pulse') p.pulseT+=p.pulseSpd*dt;
-    if(p.cracking){
-      p.crackT-=dt;p.opacity=Math.max(0,p.crackT/.28);
-      if(p.crackT<=0){
-        p.alive=false;
-        addParticles(p.x-scrollX,p.y,p.lane==='floor'?COL_FLOOR:COL_CEIL,10,1);
-        const px=p.x-scrollX;
-        if(ball.on&&ball.x>=px-p.w/2-4&&ball.x<=px+p.w/2+4&&ball.lane===p.lane){
-          ball.on=false;ball.vy=0;
-        }
-      }
-    }
-    if(p.x-scrollX<-p.w-20) pads.splice(i,1);
-  }
-
-  // coins
-  for(let i=coins.length-1;i>=0;i--){
-    const c=coins[i];
-    c.t+=dt*4;
-    const cx=c.x-scrollX;
-    if(cx<-20){coins.splice(i,1);continue}
-    if(!c.alive) continue;
-    const dx=ball.x-cx,dy=ball.y-c.y;
-    if(dx*dx+dy*dy<(BALL_R+c.r)*(BALL_R+c.r)){
-      c.alive=false;score+=5*multiplier;
-      addParticles(cx,c.y,COL_COIN,10,1);
-      updateUI();
-    }
-  }
+  trail.unshift({ x: ballX, y: ballY, h: hue });
+  if (trail.length > TRAIL_N) trail.pop();
 
   // particles
-  for(let i=particles.length-1;i>=0;i--){
-    const p=particles[i];
-    p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=300*dt;
-    p.life-=dt;if(p.life<=0) particles.splice(i,1);
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx * eDt;
+    p.y += p.vy * eDt;
+    p.life -= p.decay * eDt;
+    if (p.life <= 0) particles.splice(i, 1);
   }
+
+  // popup fade
+  if (popAlpha > 0) popAlpha -= eDt * 2.5;
 
   // shake
-  if(shakeDur>0){
-    shakeT+=dt;
-    if(shakeT>=shakeDur){shakeDur=0;shakeX=0;shakeY=0}
-    else{const f=1-shakeT/shakeDur;shakeX=(Math.random()-.5)*14*f;shakeY=(Math.random()-.5)*14*f}
-  }
-
-  spawnAhead();
+  if (shakeTmr > 0) {
+    shakeTmr -= rawDt;
+    shakeX = (Math.random() - 0.5) * shakeMag * 2;
+    shakeY = (Math.random() - 0.5) * shakeMag * 2;
+  } else { shakeX = 0; shakeY = 0; }
 }
 
-/* ---- render ---- */
-function render(){
+/* ═══════════════════════════════════════════
+   DRAW
+   ═══════════════════════════════════════════ */
+function draw() {
   ctx.save();
-  ctx.translate(shakeX,shakeY);
+  ctx.translate(shakeX, shakeY);
 
-  // bg
-  const bg=ctx.createLinearGradient(0,0,0,H);
-  bg.addColorStop(0,'#0a0014');bg.addColorStop(.5,'#120026');bg.addColorStop(1,'#0a0014');
-  ctx.fillStyle=bg;ctx.fillRect(-20,-20,W+40,H+40);
+  // ── background ──
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, '#0a0014');
+  bg.addColorStop(0.5, '#0d0020');
+  bg.addColorStop(1, '#06000e');
+  ctx.fillStyle = bg;
+  ctx.fillRect(-12, -12, W + 24, H + 24);
 
-  // streaks
-  for(const s of streaks){
-    ctx.globalAlpha=s.a;
-    ctx.strokeStyle=`hsl(${s.h},60%,50%)`;ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(s.x+s.len,s.y);ctx.stroke();
+  // ── scrolling grid ──
+  ctx.globalAlpha = 0.05;
+  ctx.strokeStyle = `hsl(${hue},50%,40%)`;
+  ctx.lineWidth = 0.8;
+  const gs = 42 * S;
+  const ox = (bgScroll * S) % gs;
+  for (let x = -ox; x < W + gs; x += gs) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
   }
-  ctx.globalAlpha=1;
+  for (let y = 0; y < H; y += gs) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
 
-  // lane lines
-  ctx.strokeStyle='rgba(255,179,71,.12)';ctx.lineWidth=1;
-  ctx.beginPath();ctx.moveTo(0,FLOOR_Y());ctx.lineTo(W,FLOOR_Y());ctx.stroke();
-  ctx.strokeStyle='rgba(179,136,255,.12)';
-  ctx.beginPath();ctx.moveTo(0,CEIL_Y());ctx.lineTo(W,CEIL_Y());ctx.stroke();
+  // ── lane lines ──
+  ctx.strokeStyle = `hsla(${hue},60%,35%,0.25)`;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(0, LANE_MARGIN * S); ctx.lineTo(W, LANE_MARGIN * S);
+  ctx.moveTo(0, H - LANE_MARGIN * S); ctx.lineTo(W, H - LANE_MARGIN * S);
+  ctx.stroke();
 
+  // ── game objects ──
+  if (state === ST.PLAY || state === ST.OVER) drawGame();
+
+  // ── overlays ──
+  if (state === ST.START) drawStart();
+  if (state === ST.OVER)  drawOver();
+
+  // ── vignette ──
+  if (vignette > 0) {
+    const vg = ctx.createRadialGradient(W / 2, H / 2, H * 0.18, W / 2, H / 2, H * 0.72);
+    vg.addColorStop(0, 'rgba(0,0,0,0)');
+    vg.addColorStop(1, `rgba(0,200,255,${vignette * 0.35})`);
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  ctx.restore();
+}
+
+/* ── Draw game objects ── */
+function drawGame() {
   // pads
-  for(const p of pads){
-    if(!p.alive) continue;
-    const px=p.x-scrollX;
-    if(px<-p.w-10||px>W+p.w+10) continue;
-    const col=p.lane==='floor'?COL_FLOOR:COL_CEIL;
-    ctx.globalAlpha=p.opacity;
-    ctx.shadowColor=col;ctx.shadowBlur=14;
-    ctx.fillStyle=col;
-    const l=px-p.w/2;
-    roundRect(ctx,l,p.y,p.w,p.h,3);
-    ctx.fill();
-    ctx.shadowBlur=0;
+  for (const p of pads) {
+    if (p.x + p.w < -10 || p.x > W + 10) continue;
+    const py = padY(p);
+    const ph = p.hot ? 30 : hue;
+    const ps = p.hot ? 100 : 70;
+    const pl = p.hot ? 58 : 42;
 
-    // perfect zone
-    const pw=perfectZone(p);
-    ctx.fillStyle=COL_PERFECT;ctx.globalAlpha=p.opacity*.35;
-    roundRect(ctx,px-pw,p.y,pw*2,p.h,2);ctx.fill();
+    // glow
+    ctx.globalAlpha = p.hot ? 0.35 + Math.sin(time * 8) * 0.15 : 0.18;
+    ctx.fillStyle = `hsl(${ph},${ps}%,${pl}%)`;
+    const g = 4 * S;
+    ctx.fillRect(p.x - g, py - g, p.w + g * 2, p.h + g * 2);
+    ctx.globalAlpha = 1;
 
-    // fragile dashes
-    if(p.type==='fragile'){
-      ctx.strokeStyle='rgba(255,255,255,.3)';ctx.lineWidth=1;
-      ctx.setLineDash([3,3]);
-      roundRect(ctx,l+1,p.y+1,p.w-2,p.h-2,2);ctx.stroke();
-      ctx.setLineDash([]);
+    // body
+    ctx.fillStyle = `hsl(${ph},${ps}%,${pl}%)`;
+    ctx.fillRect(p.x, py, p.w, p.h);
+
+    // sweet spot
+    const sw = p.w * PERFECT_ZONE;
+    const cx = p.x + p.w / 2;
+    ctx.fillStyle = `hsla(${ph},100%,82%,0.45)`;
+    ctx.fillRect(cx - sw / 2, py, sw, p.h);
+
+    // hot border pulse
+    if (p.hot) {
+      ctx.strokeStyle = `hsla(30,100%,68%,${0.45 + Math.sin(time * 10) * 0.3})`;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(p.x - 1, py - 1, p.w + 2, p.h + 2);
     }
-    ctx.globalAlpha=1;
+
+    // wobble indicator
+    if (p.wobble) {
+      ctx.fillStyle = `hsla(${ph},70%,70%,0.25)`;
+      ctx.fillRect(p.x, py - 2 * S, p.w, p.h + 4 * S);
+    }
   }
 
-  // coins
-  for(const c of coins){
-    if(!c.alive) continue;
-    const cx=c.x-scrollX;
-    if(cx<-20||cx>W+20) continue;
-    const pulse=1+Math.sin(c.t)*.15;
-    ctx.shadowColor=COL_COIN;ctx.shadowBlur=10;
-    ctx.fillStyle=COL_COIN;ctx.globalAlpha=.9;
-    ctx.beginPath();ctx.arc(cx,c.y,c.r*pulse,0,6.2832);ctx.fill();
-    ctx.shadowBlur=0;ctx.globalAlpha=1;
+  // trail
+  for (let i = 1; i < trail.length; i++) {
+    const t = trail[i];
+    const a = (1 - i / trail.length) * 0.45;
+    const r = BALL_R * S * (1 - i / trail.length) * 0.65;
+    ctx.globalAlpha = a;
+    ctx.fillStyle = `hsl(${t.h},75%,58%)`;
+    ctx.beginPath(); ctx.arc(t.x, t.y, r, 0, Math.PI * 2); ctx.fill();
   }
+  ctx.globalAlpha = 1;
 
-  // ball trail
-  const bc=ball.lane==='floor'?COL_FLOOR:COL_CEIL;
-  for(let i=ball.trail.length-1;i>=0;i--){
-    const t=ball.trail[i];
-    ctx.globalAlpha=t.a*.35;ctx.fillStyle=bc;
-    ctx.beginPath();ctx.arc(t.x,t.y,BALL_R*(1-i/ball.trail.length*.6),0,6.2832);ctx.fill();
+  // ball glow (layered circles, no shadowBlur)
+  const gl = [
+    { r: BALL_R * S * 2.8, a: 0.06 },
+    { r: BALL_R * S * 1.9, a: 0.14 },
+    { r: BALL_R * S * 1.35, a: 0.28 }
+  ];
+  for (const g of gl) {
+    ctx.globalAlpha = g.a;
+    ctx.fillStyle = `hsl(${hue},80%,58%)`;
+    ctx.beginPath(); ctx.arc(ballX, ballY, g.r, 0, Math.PI * 2); ctx.fill();
   }
-  ctx.globalAlpha=1;
+  ctx.globalAlpha = 1;
 
   // ball
-  ctx.shadowColor=bc;ctx.shadowBlur=22;
-  ctx.fillStyle='#fff';
-  ctx.beginPath();ctx.arc(ball.x,ball.y,BALL_R,0,6.2832);ctx.fill();
-  ctx.shadowBlur=0;
-  ctx.strokeStyle=bc;ctx.lineWidth=2.5;
-  ctx.beginPath();ctx.arc(ball.x,ball.y,BALL_R+2,0,6.2832);ctx.stroke();
+  ctx.fillStyle = `hsl(${hue},90%,76%)`;
+  ctx.beginPath(); ctx.arc(ballX, ballY, BALL_R * S, 0, Math.PI * 2); ctx.fill();
 
-  // combo glow
-  if(combo>2){
-    const ca=Math.min(combo/10,.5)*(0.6+.4*Math.sin(elapsed*6));
-    ctx.globalAlpha=ca;ctx.strokeStyle=COL_PERFECT;ctx.lineWidth=1.5;
-    ctx.beginPath();ctx.arc(ball.x,ball.y,BALL_R+6+combo*.8,0,6.2832);ctx.stroke();
-    ctx.globalAlpha=1;
-  }
+  // inner highlight
+  ctx.fillStyle = `hsla(${hue},100%,95%,0.45)`;
+  ctx.beginPath(); ctx.arc(ballX - 2.5 * S, ballY - 2.5 * S, BALL_R * S * 0.35, 0, Math.PI * 2); ctx.fill();
 
   // particles
-  for(const p of particles){
-    const a=p.life/p.ml;
-    ctx.globalAlpha=a;ctx.fillStyle=p.col;
-    ctx.beginPath();ctx.arc(p.x,p.y,p.r*a,0,6.2832);ctx.fill();
+  for (const p of particles) {
+    const a = clamp(p.life, 0, 1);
+    ctx.globalAlpha = a * 0.35;
+    ctx.fillStyle = `hsl(${p.h},${p.s}%,${p.l}%)`;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 1.7, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = a;
+    ctx.fillStyle = `hsl(${p.h},${p.s}%,${p.l}%)`;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
   }
-  ctx.globalAlpha=1;
-  ctx.restore();
+  ctx.globalAlpha = 1;
+
+  // HUD
+  drawHUD();
+
+  // popup text
+  if (popAlpha > 0) {
+    ctx.globalAlpha = clamp(popAlpha, 0, 1);
+    ctx.fillStyle = `hsl(${hue},100%,85%)`;
+    ctx.font = `bold ${17 * S}px 'Segoe UI',system-ui,sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(popText, ballX, ballY - 28 * S - (1 - clamp(popAlpha, 0, 1)) * 14 * S);
+    ctx.globalAlpha = 1;
+  }
 }
 
-function roundRect(c,x,y,w,h,r){
-  c.beginPath();
-  c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);
-  c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
-  c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);
-  c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath();
+/* ── HUD ── */
+function drawHUD() {
+  const px = 12 * S, py = 10 * S;
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+
+  // score
+  ctx.fillStyle = '#fff';
+  ctx.font = `bold ${17 * S}px 'Segoe UI',system-ui,sans-serif`;
+  ctx.fillText('' + score, px, py);
+
+  // multiplier
+  if (multi > 1) {
+    ctx.fillStyle = `hsl(${hue},90%,72%)`;
+    ctx.font = `bold ${13 * S}px 'Segoe UI',system-ui,sans-serif`;
+    ctx.fillText('x' + multi, px + 55 * S, py + 2 * S);
+  }
+
+  // combo
+  if (combo > 0) {
+    ctx.fillStyle = `hsla(${hue},65%,68%,0.65)`;
+    ctx.font = `${10 * S}px 'Segoe UI',system-ui,sans-serif`;
+    ctx.fillText('Combo ' + combo, px, py + 22 * S);
+  }
+
+  // save meter (top-right)
+  ctx.textAlign = 'right';
+  const rx = W - 12 * S;
+  const my = 12 * S;
+  const tw = 9 * S, th = 13 * S, tg = 3 * S;
+  for (let i = 0; i < 5; i++) {
+    const tx = rx - (4 - i) * (tw + tg);
+    if (i < saveCharges) ctx.fillStyle = 'hsl(175,90%,55%)';
+    else if (i === saveCharges && saveMeter > 0) ctx.fillStyle = `hsla(175,65%,45%,${0.25 + saveMeter / PERFECTS_FOR_SAVE * 0.55})`;
+    else ctx.fillStyle = 'rgba(255,255,255,0.12)';
+    ctx.fillRect(tx, my, tw, th);
+  }
+  ctx.fillStyle = 'rgba(255,255,255,0.45)';
+  ctx.font = `${8 * S}px 'Segoe UI',system-ui,sans-serif`;
+  ctx.fillText('SAVE', rx, my + th + 3 * S);
+  ctx.textAlign = 'left';
 }
 
-/* ---- loop ---- */
-function loop(now){
+/* ── Start Screen ── */
+function drawStart() {
+  ctx.fillStyle = 'rgba(5,0,15,0.55)';
+  ctx.fillRect(0, 0, W, H);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+  ctx.fillStyle = `hsl(${hue},78%,72%)`;
+  ctx.font = `bold ${30 * S}px 'Segoe UI',system-ui,sans-serif`;
+  ctx.fillText('Neon Bounce', W / 2, H * 0.30);
+
+  ctx.fillStyle = `hsla(${(hue + 40) % 360},65%,58%,0.7)`;
+  ctx.font = `${13 * S}px 'Segoe UI',system-ui,sans-serif`;
+  ctx.fillText('Neon Flip Rally', W / 2, H * 0.37);
+
+  const pa = 0.45 + Math.sin(time * 3) * 0.35;
+  ctx.globalAlpha = pa;
+  ctx.fillStyle = '#fff';
+  ctx.font = `${16 * S}px 'Segoe UI',system-ui,sans-serif`;
+  ctx.fillText('Tap to Start', W / 2, H * 0.52);
+  ctx.globalAlpha = 1;
+
+  ctx.fillStyle = 'rgba(255,255,255,0.38)';
+  ctx.font = `${11 * S}px 'Segoe UI',system-ui,sans-serif`;
+  ctx.fillText('Tap / Space / Enter to flip gravity', W / 2, H * 0.60);
+
+  if (best > 0) {
+    ctx.fillStyle = 'rgba(255,255,255,0.45)';
+    ctx.font = `${12 * S}px 'Segoe UI',system-ui,sans-serif`;
+    ctx.fillText('Best: ' + best, W / 2, H * 0.70);
+  }
+}
+
+/* ── Game Over Screen ── */
+function drawOver() {
+  ctx.fillStyle = 'rgba(5,0,15,0.68)';
+  ctx.fillRect(0, 0, W, H);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+  ctx.fillStyle = '#ff4466';
+  ctx.font = `bold ${27 * S}px 'Segoe UI',system-ui,sans-serif`;
+  ctx.fillText('Game Over', W / 2, H * 0.26);
+
+  ctx.fillStyle = '#fff';
+  ctx.font = `bold ${22 * S}px 'Segoe UI',system-ui,sans-serif`;
+  ctx.fillText('Score: ' + score, W / 2, H * 0.38);
+
+  ctx.fillStyle = `hsl(${hue},78%,72%)`;
+  ctx.font = `${15 * S}px 'Segoe UI',system-ui,sans-serif`;
+  ctx.fillText('Best: ' + best, W / 2, H * 0.46);
+
+  if (maxCombo > 0) {
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.font = `${12 * S}px 'Segoe UI',system-ui,sans-serif`;
+    ctx.fillText('Max Combo: ' + maxCombo, W / 2, H * 0.53);
+  }
+
+  // share button
+  const bw = 96 * S, bh = 30 * S;
+  const bx = W / 2 - bw / 2, by = H * 0.61;
+  shareBR = { x: bx, y: by, w: bw, h: bh };
+
+  ctx.fillStyle = `hsla(${hue},65%,45%,0.28)`;
+  ctx.strokeStyle = `hsl(${hue},65%,58%)`;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(bx, by, bw, bh, 5 * S);
+  else { ctx.rect(bx, by, bw, bh); }
+  ctx.fill(); ctx.stroke();
+
+  ctx.fillStyle = `hsl(${hue},80%,80%)`;
+  ctx.font = `${12 * S}px 'Segoe UI',system-ui,sans-serif`;
+  ctx.fillText('Share', W / 2, by + bh / 2);
+
+  const ra = 0.45 + Math.sin(time * 3) * 0.35;
+  ctx.globalAlpha = ra;
+  ctx.fillStyle = '#fff';
+  ctx.font = `${15 * S}px 'Segoe UI',system-ui,sans-serif`;
+  ctx.fillText('Tap to Retry', W / 2, H * 0.76);
+  ctx.globalAlpha = 1;
+}
+
+/* ═══════════════════════════════════════════
+   MAIN LOOP
+   ═══════════════════════════════════════════ */
+hue = 200; time = 0; lastTS = 0;
+
+function loop(ts) {
   requestAnimationFrame(loop);
-  if(!lastTime){lastTime=now;return}
-  let dt=(now-lastTime)/1000;
-  lastTime=now;
-  if(dt>.1) dt=.1;
-  update(dt);
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.save();ctx.scale(dpr,dpr);
-  render();
-  ctx.restore();
+  if (!lastTS) { lastTS = ts; return; }
+  dt = Math.min((ts - lastTS) / 1000, 0.05);
+  lastTS = ts;
+
+  if (state === ST.START) time += dt;
+
+  update();
+  draw();
 }
 
-// HSL cycle title
-(()=>{
-  const sp=startOv.querySelector('h1 span');
-  let th=0;
-  setInterval(()=>{th=(th+1)%360;if(sp)sp.style.color=`hsl(${th},80%,70%)`},50);
-})();
-
-initGame();
+init();
+state = ST.START;
 requestAnimationFrame(loop);
+
 })();
 </script>
 </body>
