@@ -2,833 +2,807 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Neon Bounce - Free HTML5 Game</title>
-<meta name="description" content="Neon Bounce: Flip & Perfect – a hyper-casual HTML5 game. Tap to bounce and flip between lanes, land perfect combos, build multipliers, and chase high scores. Free, no install, plays in any browser.">
-<meta name="theme-color" content="#0a0014">
-<link rel="canonical" href="https://balinti.github.io/neon-bounce/">
+<meta name="description" content="Play Neon Bounce - Tap to bounce a glowing ball between neon platforms. Miss a platform and fall into the void. Platforms get narrower as score increases.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0b0f1a">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Neon Bounce - Free HTML5 Game">
-<meta property="og:description" content="Tap to bounce and flip between lanes. Land perfect combos, build multipliers, and chase high scores in this free hyper-casual HTML5 game.">
+<meta property="og:description" content="Tap to bounce a glowing ball between neon platforms. Miss a platform and fall into the void!">
 <meta property="og:url" content="https://balinti.github.io/neon-bounce/">
-<meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='630' viewBox='0 0 1200 630'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%230a0014'/%3E%3Cstop offset='100%25' stop-color='%23120028'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='630' fill='url(%23bg)'/%3E%3Ccircle cx='600' cy='260' r='40' fill='%2300ffcc'/%3E%3Crect x='350' y='340' width='500' height='12' rx='6' fill='%23ff00ff' opacity='0.8'/%3E%3Crect x='400' y='420' width='400' height='12' rx='6' fill='%2300ccff' opacity='0.6'/%3E%3Crect x='300' y='500' width='600' height='12' rx='6' fill='%23ffcc00' opacity='0.5'/%3E%3Ctext x='600' y='180' text-anchor='middle' font-family='sans-serif' font-size='64' font-weight='bold' fill='%2300ffcc'%3ENeon Bounce%3C/text%3E%3C/svg%3E">
+<meta property="og:image" content="https://balinti.github.io/neon-bounce/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Neon Bounce - Free HTML5 Game">
-<meta name="twitter:description" content="Tap to bounce and flip between lanes. Land perfect combos, build multipliers, and chase high scores.">
-<meta name="twitter:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='630' viewBox='0 0 1200 630'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%230a0014'/%3E%3Cstop offset='100%25' stop-color='%23120028'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='630' fill='url(%23bg)'/%3E%3Ccircle cx='600' cy='260' r='40' fill='%2300ffcc'/%3E%3Ctext x='600' y='180' text-anchor='middle' font-family='sans-serif' font-size='64' font-weight='bold' fill='%2300ffcc'%3ENeon Bounce%3C/text%3E%3C/svg%3E">
+<meta name="twitter:description" content="Tap to bounce a glowing ball between neon platforms. Miss a platform and fall into the void!">
+<meta name="twitter:image" content="https://balinti.github.io/neon-bounce/og.png">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4099346100621490" crossorigin="anonymous"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#0a0014;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:#fff;touch-action:none;-webkit-tap-highlight-color:transparent;user-select:none}
-#app{position:relative;width:100%;max-width:420px;height:100vh;height:100dvh;max-height:750px;margin:0 auto;overflow:hidden}
-#c{display:block;width:100%;height:100%}
-#ui{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;display:flex;align-items:center;justify-content:center}
-.panel{pointer-events:auto;text-align:center;padding:30px 20px;border-radius:16px;background:rgba(10,0,20,0.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(0,255,200,0.15);max-width:320px;width:90%;display:none;flex-direction:column;align-items:center;gap:10px}
-.panel.active{display:flex}
-.panel h1{font-size:2.2em;background:linear-gradient(135deg,#0fc,#f0f,#0cf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;line-height:1.1}
-.panel h2{font-size:1.5em;color:#0fc;margin-bottom:4px}
-.panel .sub{font-size:0.85em;color:rgba(255,255,255,0.5);margin-bottom:8px}
-.panel .score-big{font-size:3em;font-weight:bold;color:#fff;line-height:1.1}
-.panel .score-best{font-size:1em;color:rgba(255,255,255,0.6)}
-.panel .highlights{font-size:0.8em;color:rgba(255,255,255,0.45);line-height:1.6}
-.panel .cta{font-size:1.1em;color:#0fc;margin-top:8px;animation:pulse 1.8s ease-in-out infinite}
-.panel .hint{font-size:0.75em;color:rgba(255,255,255,0.35)}
-.panel .challenge-banner{font-size:0.9em;color:#f0f;padding:6px 12px;border:1px solid rgba(255,0,255,0.3);border-radius:8px;margin-bottom:4px}
-.share-btn{pointer-events:auto;background:linear-gradient(135deg,rgba(0,255,200,0.15),rgba(255,0,255,0.15));border:1px solid rgba(0,255,200,0.3);color:#0fc;padding:8px 18px;border-radius:8px;font-size:0.85em;cursor:pointer;margin-top:4px;transition:background 0.2s}
-.share-btn:active{background:rgba(0,255,200,0.25)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-#seo-details{max-width:420px;margin:8px auto 0;text-align:center}
-#seo-details summary{color:rgba(255,255,255,0.3);font-size:0.7em;cursor:pointer}
-#seo-details p{color:rgba(255,255,255,0.2);font-size:0.65em;padding:8px 16px;line-height:1.5}
+html,body{width:100%;height:100%;overflow:hidden;background:#0b0f1a;font-family:'Segoe UI',system-ui,sans-serif;touch-action:none;user-select:none;-webkit-user-select:none}
+#wrap{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;width:100%;height:100%;position:relative;overflow-y:auto}
+#c{display:block;max-width:420px;max-height:750px;width:100%;flex-shrink:0}
+#info{max-width:420px;width:100%;color:#8892a4;font-size:12px;padding:14px 12px 32px;line-height:1.6;text-align:center}
+#info h3{color:#c8d0e0;font-size:14px;margin:10px 0 4px}
+#info p{margin:0 0 6px}
 </style>
 </head>
 <body>
-<div id="app">
+<div id="wrap">
 <canvas id="c"></canvas>
-<div id="ui">
-<div id="startPanel" class="panel active">
-<h1>Neon Bounce</h1>
-<div class="sub">Flip &amp; Perfect</div>
-<div id="challengeBanner" class="challenge-banner" style="display:none"></div>
-<div class="cta">Tap to Start</div>
-<div class="hint">One tap = Bounce + Flip lane</div>
-</div>
-<div id="overPanel" class="panel">
-<h2>Game Over</h2>
-<div id="finalScore" class="score-big">0</div>
-<div id="bestScore" class="score-best">Best: 0</div>
-<div id="runHighlights" class="highlights"></div>
-<div class="cta">Tap to Retry</div>
-<button id="shareBtn" class="share-btn">Challenge a Friend</button>
+<div id="info">
+<h3>How to Play</h3>
+<p>Tap or press Space to bounce and switch lanes. Land on platform centers for combo bonuses. Collect shards to fill the Overdrive meter for a score multiplier boost!</p>
+<h3>FAQ</h3>
+<p><strong>Is Neon Bounce free?</strong> Yes, Neon Bounce is 100% free to play in any browser.</p>
+<p><strong>How do I get a high score?</strong> Hit platform hot zones for combos, collect shards, and activate Overdrive for maximum points.</p>
+<p><strong>Does it work on mobile?</strong> Yes! Tap anywhere on the screen to play.</p>
 </div>
 </div>
-</div>
-<details id="seo-details">
-<summary>About Neon Bounce</summary>
-<p>Neon Bounce: Flip &amp; Perfect is a free hyper-casual HTML5 game. Tap to bounce between three neon lanes, land perfect combos to build multipliers, and earn Void Dash charges for clutch saves. Features increasing difficulty with moving, breaking, and blinking platforms. No download required &ndash; plays instantly in any modern browser on mobile or desktop.</p>
-</details>
 <script>
-'use strict';
 (function(){
+"use strict";
 
-/* ── Canvas & DPR ── */
-var canvas = document.getElementById('c');
-var ctx = canvas.getContext('2d', { alpha: false });
-var app = document.getElementById('app');
-var W, H, dpr;
+const cv=document.getElementById("c");
+const ctx=cv.getContext("2d");
 
-function resize() {
-  var r = app.getBoundingClientRect();
-  dpr = Math.min(window.devicePixelRatio || 1, 2);
-  W = r.width;
-  H = r.height;
-  canvas.width = W * dpr;
-  canvas.height = H * dpr;
-  canvas.style.width = W + 'px';
-  canvas.style.height = H + 'px';
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+/* ======== Hi-DPI scaling ======== */
+let DPR=Math.min(window.devicePixelRatio||1,3);
+let W,H;
+function resize(){
+  const maxW=420,maxH=750;
+  let cw=Math.min(window.innerWidth,maxW);
+  let ch=Math.min(window.innerHeight,maxH);
+  if(window.innerWidth<=520) ch=Math.min(window.innerHeight,maxH);
+  DPR=Math.min(window.devicePixelRatio||1,3);
+  cv.style.width=cw+"px";
+  cv.style.height=ch+"px";
+  cv.width=Math.round(cw*DPR);
+  cv.height=Math.round(ch*DPR);
+  W=cw; H=ch;
+  ctx.setTransform(DPR,0,0,DPR,0,0);
 }
-window.addEventListener('resize', resize);
 resize();
+window.addEventListener("resize",resize);
 
-/* ── UI refs ── */
-var startPanel = document.getElementById('startPanel');
-var overPanel = document.getElementById('overPanel');
-var finalScoreEl = document.getElementById('finalScore');
-var bestScoreEl = document.getElementById('bestScore');
-var runHighlightsEl = document.getElementById('runHighlights');
-var shareBtn = document.getElementById('shareBtn');
-var challengeBanner = document.getElementById('challengeBanner');
+/* ======== Constants ======== */
+const LANE_L=()=>W*0.28;
+const LANE_R=()=>W*0.72;
+const BALL_R=10;
+const GRAVITY=0.38;
+const BASE_SCROLL=1.8;
+const BASE_SPAWN=88;
+const BASE_PLAT_W=72;
+const MIN_PLAT_W=36;
+const PLAT_H=10;
+const HOT_ZONE_RATIO=0.30;
+const JUMP_V=-9.5;
+const COLLISION_INSET=4;
+const OVERDRIVE_DURATION=180;
+const MAX_PARTICLES=240;
+const SHARD_SIZE=8;
+const SHARD_SPAWN_CHANCE=0.18;
+const OVERDRIVE_FILL=100;
 
-/* ── Challenge param ── */
-var urlParams = new URLSearchParams(window.location.search);
-var challengeScore = parseInt(urlParams.get('challenge')) || 0;
-if (challengeScore > 0) {
-  challengeBanner.textContent = 'Challenge: Beat ' + challengeScore;
-  challengeBanner.style.display = 'block';
-}
+/* ======== State ======== */
+let state="start";
+let score=0;
+let best=parseInt(localStorage.getItem("nb_best2"))||0;
+let combo=0;
+let overdriveTimer=0;
+let overdriveMeter=0;
+let hue=200;
+let shakeT=0;
+let shakeIntensity=0;
+let frameCount=0;
 
-/* ── localStorage ── */
-var LS_KEY = 'neonBounce_bestScore';
-var bestScore = parseInt(localStorage.getItem(LS_KEY)) || 0;
+/* ======== Challenge params ======== */
+const urlParams=new URLSearchParams(window.location.search);
+const challengeTarget=urlParams.get("target")?parseInt(urlParams.get("target")):null;
+const challengeCode=urlParams.get("challenge")||null;
 
-/* ── Game state machine ── */
-var STATE_START = 0, STATE_PLAYING = 1, STATE_OVER = 2;
-var state = STATE_START;
+/* ======== Ball ======== */
+let ball={x:0,y:0,vx:0,vy:0,lane:0,onPlat:false,trail:[]};
 
-/* ── Constants ── */
-var BALL_R = 10;
-var PLAT_H = 8;
-var GRAVITY = 1400;
-var BOUNCE_VEL = -520;
-var LANE_COUNT = 3;
-var LANE_PAD = 24;
+/* ======== Platforms / Shards ======== */
+let platforms=[];
+let shards=[];
 
-function laneX(lane) {
-  var usable = W - LANE_PAD * 2;
-  return LANE_PAD + usable * (lane + 0.5) / LANE_COUNT;
-}
+/* ======== Particle pool ======== */
+let particles=[];
 
-/* ── Object pools ── */
-var player = {};
-var platforms = [];
-var particles = [];
-var rings = [];
-var trails = [];
-
-/* ── Run state ── */
-var score, mult, perfectStreak, perfectTotal, maxMult, maxStreak;
-var dashCharges, dashUsed, totalDashEarned;
-var scrollSpeed, spawnCursor, gameTime;
-var shakeX, shakeY, shakeDur;
-var dashInvuln, dashFlashTime;
-var vignetteAlpha;
-var lastTime;
-
-/* ── Platform width/gap by score ── */
-function platWidth() {
-  var w0 = W * 0.42;
-  var wMin = W * 0.28;
-  return Math.max(w0 - 0.65 * score, wMin);
-}
-function platGap() {
-  return Math.min(118 + 0.55 * score, 170);
-}
-
-/* ── Platform type selection by score bands ── */
-function pickType() {
-  var s = score;
-  var r = Math.random();
-  if (s < 10) return 'static';
-  if (s < 30) return r < 0.7 ? 'static' : 'moving';
-  if (s < 60) {
-    if (r < 0.55) return 'static';
-    if (r < 0.80) return 'moving';
-    return 'break';
+function spawnParticles(x,y,count,color,speed,life){
+  for(let i=0;i<count&&particles.length<MAX_PARTICLES;i++){
+    const a=Math.random()*Math.PI*2;
+    const s=(0.5+Math.random()*1.5)*speed;
+    particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life,maxLife:life,color,size:2+Math.random()*3});
   }
-  if (r < 0.40) return 'static';
-  if (r < 0.65) return 'moving';
-  if (r < 0.85) return 'break';
-  return 'blink';
 }
 
-/* ── Platform factory ── */
-function makePlatform(lane, y, type, w) {
-  return {
-    x: laneX(lane),
-    y: y,
-    w: w,
-    lane: lane,
-    type: type,
-    alive: true,
-    breakTimer: -1,
-    blinkPhase: Math.random() * Math.PI * 2,
-    movePhase: Math.random() * Math.PI * 2,
-    moveAmp: type === 'moving' ? Math.min(18 + 0.08 * score, 34) : 0,
-    visible: true,
-    landed: false
+function updateParticles(){
+  for(let i=particles.length-1;i>=0;i--){
+    const p=particles[i];
+    p.x+=p.vx; p.y+=p.vy;
+    p.vy+=0.04;
+    p.life--;
+    if(p.life<=0) particles.splice(i,1);
+  }
+}
+
+function drawParticles(){
+  for(const p of particles){
+    const a=p.life/p.maxLife;
+    ctx.globalAlpha=a;
+    ctx.fillStyle=p.color;
+    ctx.fillRect(p.x-p.size*a/2,p.y-p.size*a/2,p.size*a,p.size*a);
+  }
+  ctx.globalAlpha=1;
+}
+
+/* ======== Difficulty scaling ======== */
+function diff(){
+  const t=Math.min(score,250);
+  return{
+    scrollV: BASE_SCROLL+t*0.012,
+    spawnInterval: Math.max(32, BASE_SPAWN-t*0.22),
+    platW: Math.max(MIN_PLAT_W, BASE_PLAT_W-t*0.15),
+    jumpV: JUMP_V-t*0.005,
+    moverChance: Math.min(0.35, 0.02+t*0.0015),
+    breakableChance: Math.min(0.18, t*0.0008),
+    fakeChance: Math.min(0.10, t*0.0005)
   };
 }
 
-/* ── Spawn a row of platforms at spawnCursor ── */
-function spawnRow() {
-  spawnCursor -= platGap();
-  var s = score;
-  var w = platWidth();
-  var lanes = [];
-
-  if (s >= 30 && Math.random() < 0.20) {
-    /* 2 platforms in different lanes */
-    var a = Math.floor(Math.random() * 3);
-    var b = (a + 1 + Math.floor(Math.random() * 2)) % 3;
-    lanes.push(a, b);
-  } else {
-    var lane;
-    if (s >= 60 && Math.random() < 0.12) {
-      /* Skip the expected next lane */
-      var expected = (player.lane + 1) % 3;
-      var options = [];
-      for (var li = 0; li < 3; li++) { if (li !== expected) options.push(li); }
-      lane = options[Math.floor(Math.random() * options.length)];
-    } else {
-      lane = Math.floor(Math.random() * 3);
-    }
-    lanes.push(lane);
-  }
-
-  for (var i = 0; i < lanes.length; i++) {
-    platforms.push(makePlatform(lanes[i], spawnCursor, pickType(), w));
-  }
-}
-
-/* ── Particles ── */
-function spawnParticles(x, y, count, hue, speed) {
-  for (var i = 0; i < count; i++) {
-    var angle = Math.random() * Math.PI * 2;
-    var spd = (0.3 + Math.random() * 0.7) * speed;
-    var life = 0.5 + Math.random() * 0.4;
-    particles.push({
-      x: x, y: y,
-      vx: Math.cos(angle) * spd,
-      vy: Math.sin(angle) * spd - 60,
-      life: life, maxLife: life,
-      hue: hue + Math.random() * 30 - 15,
-      size: 2 + Math.random() * 3
+/* ======== Platform spawn ======== */
+let spawnTimer=0;
+function spawnRow(){
+  const d=diff();
+  const pw=d.platW+(overdriveTimer>0?14:0);
+  const hotW=pw*HOT_ZONE_RATIO;
+  for(let lane=0;lane<2;lane++){
+    const cx=lane===0?LANE_L():LANE_R();
+    let type="normal";
+    const r=Math.random();
+    if(r<d.fakeChance) type="fake";
+    else if(r<d.fakeChance+d.breakableChance) type="breakable";
+    const isMover=Math.random()<d.moverChance&&type==="normal";
+    platforms.push({
+      x:cx-pw/2, y:-PLAT_H-10,
+      w:pw, h:PLAT_H,
+      hotX:cx-hotW/2, hotW:hotW,
+      lane:lane, type:type,
+      isMover:isMover,
+      moveDir:Math.random()<0.5?1:-1,
+      moveSpeed:0.4+Math.random()*0.6,
+      moveRange:12+Math.random()*18,
+      origX:cx-pw/2,
+      broken:false, fakeReveal:false,
+      hue:180+Math.random()*80
     });
   }
-}
-
-function spawnRing(x, y, hue) {
-  rings.push({ x: x, y: y, r: 5, maxR: 50, life: 0.4, maxLife: 0.4, hue: hue });
-}
-
-/* ── Screen shake ── */
-function triggerShake(intensity, duration) {
-  shakeDur = duration;
-  shakeX = (Math.random() - 0.5) * intensity;
-  shakeY = (Math.random() - 0.5) * intensity;
-}
-
-/* ── HSL cycling ── */
-function hslCycle(t, m) {
-  return ((180 + t * 40 + m * 20) % 360) | 0;
-}
-
-/* ── Init game ── */
-function initGame() {
-  score = 0; mult = 1;
-  perfectStreak = 0; perfectTotal = 0;
-  maxMult = 1; maxStreak = 0;
-  dashCharges = 0; dashUsed = false; totalDashEarned = 0;
-  scrollSpeed = 220;
-  gameTime = 0;
-  shakeX = 0; shakeY = 0; shakeDur = 0;
-  dashInvuln = 0; dashFlashTime = 0; vignetteAlpha = 0;
-  particles.length = 0; rings.length = 0; trails.length = 0; platforms.length = 0;
-
-  player.x = laneX(1);
-  player.y = H * 0.35;
-  player.vy = 0;
-  player.lane = 1;
-  player.prevY = player.y;
-  player.onPlatform = false;
-
-  /* Starting platform */
-  spawnCursor = H * 0.55;
-  platforms.push(makePlatform(1, H * 0.45, 'static', W * 0.42));
-
-  /* Fill screen */
-  while (spawnCursor > -100) {
-    spawnRow();
+  if(Math.random()<SHARD_SPAWN_CHANCE){
+    const lane=Math.random()<0.5?0:1;
+    const cx=lane===0?LANE_L():LANE_R();
+    shards.push({x:cx,y:-20,lane:lane,collected:false});
   }
 }
 
-/* ── Input ── */
-var inputQueued = false;
+/* ======== Screen shake ======== */
+function triggerShake(intensity,duration){
+  shakeIntensity=Math.max(shakeIntensity,intensity);
+  shakeT=Math.max(shakeT,duration);
+}
 
-function handleInput(e) {
-  if (e) e.preventDefault();
-  if (state === STATE_START) {
-    state = STATE_PLAYING;
-    startPanel.classList.remove('active');
+/* ======== Init ======== */
+function initGame(){
+  score=0; combo=0;
+  overdriveTimer=0; overdriveMeter=0;
+  frameCount=0; spawnTimer=0;
+  shakeT=0; shakeIntensity=0;
+  platforms=[]; shards=[]; particles=[];
+  ball.lane=0;
+  ball.x=LANE_L();
+  ball.y=H*0.55;
+  ball.vy=0;
+  ball.onPlat=false;
+  ball.trail=[];
+  // initial platforms
+  for(let i=0;i<8;i++){
+    const pw=BASE_PLAT_W;
+    const hotW=pw*HOT_ZONE_RATIO;
+    for(let lane=0;lane<2;lane++){
+      const cx=lane===0?LANE_L():LANE_R();
+      platforms.push({
+        x:cx-pw/2, y:H*0.35+i*65,
+        w:pw, h:PLAT_H,
+        hotX:cx-hotW/2, hotW:hotW,
+        lane:lane, type:"normal",
+        isMover:false, moveDir:1, moveSpeed:0, moveRange:0, origX:cx-pw/2,
+        broken:false, fakeReveal:false,
+        hue:180+Math.random()*80
+      });
+    }
+  }
+}
+
+/* ======== Input ======== */
+let inputLocked=false;
+function doAction(){
+  if(inputLocked) return;
+  if(state==="start"){
+    state="playing";
     initGame();
-    lastTime = performance.now();
-    requestAnimationFrame(gameLoop);
+    ball.vy=JUMP_V;
+    ball.onPlat=false;
     return;
   }
-  if (state === STATE_OVER) {
-    state = STATE_START;
-    overPanel.classList.remove('active');
-    startPanel.classList.add('active');
+  if(state==="gameover"){
+    // Short delay to prevent accidental restart
     return;
   }
-  if (state === STATE_PLAYING) {
-    inputQueued = true;
+  if(state==="playing"){
+    ball.lane=ball.lane===0?1:0;
+    ball.x=ball.lane===0?LANE_L():LANE_R();
+    const d=diff();
+    ball.vy=d.jumpV;
+    ball.onPlat=false;
+    spawnParticles(ball.x,ball.y,6,`hsl(${hue},100%,70%)`,2,25);
   }
 }
 
-canvas.addEventListener('pointerdown', handleInput);
-app.addEventListener('pointerdown', function(e) {
-  if (e.target === canvas || e.target === app) handleInput(e);
+let gameOverDelay=0;
+cv.addEventListener("pointerdown",function(e){
+  e.preventDefault();
+  if(state==="gameover"){
+    // Check share button first
+    const rect=cv.getBoundingClientRect();
+    const mx=(e.clientX-rect.left)*(W/rect.width);
+    const my=(e.clientY-rect.top)*(H/rect.height);
+    if(mx>=shareBtn.x&&mx<=shareBtn.x+shareBtn.w&&my>=shareBtn.y&&my<=shareBtn.y+shareBtn.h){
+      shareChallenge();
+      return;
+    }
+    if(gameOverDelay<=0){
+      state="start";
+    }
+    return;
+  }
+  doAction();
 });
-document.addEventListener('keydown', function(e) {
-  if (e.code === 'Space' || e.code === 'Enter') {
+
+document.addEventListener("keydown",function(e){
+  if(e.code==="Space"||e.code==="Enter"){
     e.preventDefault();
-    handleInput(null);
+    if(state==="gameover"&&gameOverDelay<=0){
+      state="start";
+      return;
+    }
+    doAction();
   }
 });
 
-/* ── Share button ── */
-shareBtn.addEventListener('pointerdown', function(e) { e.stopPropagation(); });
-shareBtn.addEventListener('click', function(e) {
-  e.stopPropagation();
-  var url = 'https://balinti.github.io/neon-bounce/?challenge=' + score;
-  var text = 'I scored ' + score + ' in Neon Bounce! Can you beat me?';
-  if (navigator.share) {
-    navigator.share({ title: 'Neon Bounce Challenge', text: text, url: url }).catch(function(){});
-  } else if (navigator.clipboard) {
-    navigator.clipboard.writeText(text + ' ' + url).then(function() {
-      shareBtn.textContent = 'Link Copied!';
-      setTimeout(function() { shareBtn.textContent = 'Challenge a Friend'; }, 2000);
-    }).catch(function(){});
-  }
-});
+/* ======== Share button ======== */
+const shareBtn={x:0,y:0,w:0,h:0};
+let copiedMsg=0;
 
-/* ── Rounded rect helper: cx=centerX, y=top, hw=halfWidth, h=fullHeight, r=cornerRadius ── */
-function drawRoundRect(cx, y, hw, h, r) {
-  var x0 = cx - hw, x1 = cx + hw, y0 = y, y1 = y + h;
-  ctx.beginPath();
-  ctx.moveTo(x0 + r, y0);
-  ctx.lineTo(x1 - r, y0);
-  ctx.arcTo(x1, y0, x1, y0 + r, r);
-  ctx.lineTo(x1, y1 - r);
-  ctx.arcTo(x1, y1, x1 - r, y1, r);
-  ctx.lineTo(x0 + r, y1);
-  ctx.arcTo(x0, y1, x0, y1 - r, r);
-  ctx.lineTo(x0, y0 + r);
-  ctx.arcTo(x0, y0, x0 + r, y0, r);
-  ctx.closePath();
+function shareChallenge(){
+  const code=Date.now().toString(36);
+  const url="https://balinti.github.io/neon-bounce/?target="+score+"&challenge="+code;
+  const text="I scored "+score+" in Neon Bounce! Can you beat me?\n"+url;
+  if(navigator.share){
+    navigator.share({title:"Neon Bounce Challenge",text:text,url:url}).catch(function(){});
+  } else if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){copiedMsg=120;}).catch(function(){});
+  }
 }
 
-/* ── Main game loop ── */
-function gameLoop(now) {
-  if (state !== STATE_PLAYING) return;
-  var dt = (now - lastTime) / 1000;
-  lastTime = now;
-  dt = Math.min(dt, 1 / 30);
-  gameTime += dt;
+/* ======== Update ======== */
+function update(){
+  if(state!=="playing"){
+    if(state==="gameover"&&gameOverDelay>0) gameOverDelay--;
+    updateParticles();
+    return;
+  }
+  frameCount++;
+  hue=(hue+0.5)%360;
 
-  update(dt);
-  render();
-  requestAnimationFrame(gameLoop);
-}
+  const d=diff();
+  const sv=d.scrollV;
 
-/* ── Update ── */
-function update(dt) {
-  scrollSpeed = Math.min(220 + 6.2 * score, 820);
+  // Gravity
+  ball.vy+=GRAVITY;
+  ball.y+=ball.vy;
 
-  /* Process queued input */
-  if (inputQueued) {
-    inputQueued = false;
-    player.vy = BOUNCE_VEL;
-    player.lane = (player.lane + 1) % LANE_COUNT;
-    player.onPlatform = false;
+  // Trail
+  ball.trail.push({x:ball.x,y:ball.y});
+  if(ball.trail.length>12) ball.trail.shift();
+
+  // Move platforms down
+  for(let i=0;i<platforms.length;i++){
+    const p=platforms[i];
+    p.y+=sv;
+    if(p.isMover&&!p.broken){
+      p.x=p.origX+Math.sin(frameCount*0.03*p.moveSpeed)*p.moveRange*p.moveDir;
+      p.hotX=p.x+(p.w-p.hotW)/2;
+    }
   }
 
-  /* Gravity */
-  player.vy += GRAVITY * dt;
-
-  /* Smooth lane transition */
-  var targetX = laneX(player.lane);
-  var dxl = targetX - player.x;
-  var laneSpeed = 1200;
-  if (Math.abs(dxl) < laneSpeed * dt) {
-    player.x = targetX;
-  } else {
-    player.x += (dxl > 0 ? 1 : -1) * laneSpeed * dt;
+  // Move shards down
+  for(let i=0;i<shards.length;i++){
+    shards[i].y+=sv;
   }
 
-  /* Store prev for swept collision */
-  player.prevY = player.y;
-  player.y += player.vy * dt;
-
-  /* Trail */
-  if (trails.length < 35) {
-    trails.push({ x: player.x, y: player.y, life: 0.2, maxLife: 0.2, hue: hslCycle(gameTime, mult) });
-  }
-
-  /* Scroll platforms down */
-  var sd = scrollSpeed * dt;
-  for (var i = 0; i < platforms.length; i++) {
-    platforms[i].y += sd;
-  }
-  spawnCursor += sd;
-
-  /* Spawn new rows above */
-  while (spawnCursor > -50) {
+  // Spawn
+  spawnTimer++;
+  if(spawnTimer>=d.spawnInterval){
+    spawnTimer=0;
     spawnRow();
   }
 
-  /* Update platform types */
-  for (var i = 0; i < platforms.length; i++) {
-    var p = platforms[i];
-    if (p.type === 'moving') {
-      p.x = laneX(p.lane) + Math.sin(p.movePhase + gameTime * 2 * Math.PI * 1.2) * p.moveAmp;
-    }
-    if (p.type === 'blink') {
-      var bphase = ((gameTime * 1.111 + p.blinkPhase) % 0.9);
-      p.visible = bphase < 0.62;
-    } else {
-      p.visible = true;
-    }
-    if (p.type === 'break' && p.breakTimer > 0) {
-      p.breakTimer -= dt;
-      if (p.breakTimer <= 0) p.alive = false;
-    }
-  }
+  // Collision (only when falling)
+  if(ball.vy>=0){
+    const bx=ball.x;
+    const byBottom=ball.y+BALL_R;
+    const prevByBottom=byBottom-ball.vy;
+    for(let i=0;i<platforms.length;i++){
+      const p=platforms[i];
+      if(p.broken||p.y>H||p.y<-30) continue;
+      // From-above check: prev frame ball bottom was above platform top, now at or below
+      if(prevByBottom<=p.y+2 && byBottom>=p.y){
+        if(bx>=p.x+COLLISION_INSET && bx<=p.x+p.w-COLLISION_INSET){
+          // Hit platform
+          if(p.type==="fake"){
+            p.fakeReveal=true;
+            p.broken=true;
+            spawnParticles(bx,p.y,10,"#ff4466",2,30);
+            continue;
+          }
+          if(p.type==="breakable"){
+            p.broken=true;
+            spawnParticles(p.x+p.w/2,p.y,15,`hsl(${p.hue},80%,60%)`,2.5,35);
+          }
+          // Snap to platform
+          ball.y=p.y-BALL_R;
+          ball.vy=0;
+          ball.onPlat=true;
 
-  /* Dash invuln */
-  if (dashInvuln > 0) dashInvuln -= dt;
-  if (dashFlashTime > 0) dashFlashTime -= dt;
-  if (vignetteAlpha > 0) vignetteAlpha = Math.max(0, vignetteAlpha - dt * 2.5);
-
-  /* Swept collision: ball bottom vs platform top */
-  var ballBot = player.y + BALL_R;
-  var prevBallBot = player.prevY + BALL_R;
-
-  if (player.vy > 0 && dashInvuln <= 0) {
-    for (var i = 0; i < platforms.length; i++) {
-      var p = platforms[i];
-      if (!p.alive || !p.visible) continue;
-      var pTop = p.y;
-      if (prevBallBot <= pTop && ballBot >= pTop) {
-        var halfW = p.w / 2;
-        if (player.x >= p.x - halfW && player.x <= p.x + halfW) {
-          /* Landing! */
-          player.y = pTop - BALL_R;
-          player.vy = 0;
-          player.onPlatform = true;
-
-          /* Perfect zone: center 30% */
-          var perfectHalf = halfW * 0.15;
-          var isPerfect = Math.abs(player.x - p.x) <= perfectHalf;
-
-          var h = hslCycle(gameTime, mult);
-
-          if (isPerfect) {
-            perfectStreak++;
-            perfectTotal++;
-            if (perfectStreak > maxStreak) maxStreak = perfectStreak;
-            mult = Math.min(1 + Math.floor(perfectStreak / 5), 6);
-            if (mult > maxMult) maxMult = mult;
-            score += mult + 1;
-
-            /* Dash charge: 1 per 10 perfectTotal, max 1 */
-            var earned = Math.floor(perfectTotal / 10);
-            if (earned > totalDashEarned) {
-              totalDashEarned = earned;
-              dashCharges = Math.min(dashCharges + 1, 1);
-            }
-
-            /* Visual: strong burst + ring */
-            spawnParticles(player.x, player.y + BALL_R, 16, h, 180);
-            spawnRing(player.x, player.y + BALL_R, h);
-            triggerShake(4, 0.12);
+          // Scoring
+          const hotHit=(bx>=p.hotX && bx<=p.hotX+p.hotW);
+          let pts=1;
+          if(hotHit){
+            combo++;
+            pts+=combo;
+            overdriveMeter=Math.min(OVERDRIVE_FILL,overdriveMeter+5+combo*2);
+            spawnParticles(bx,p.y,12,`hsl(${hue},100%,80%)`,3,30);
+            triggerShake(2,8);
           } else {
-            /* Normal landing */
-            score += mult;
-            perfectStreak = 0;
-            mult = 1;
-            spawnParticles(player.x, player.y + BALL_R, 8, h, 120);
-            triggerShake(2, 0.08);
+            combo=0;
           }
-
-          /* Break platform trigger */
-          if (p.type === 'break' && !p.landed) {
-            p.breakTimer = 0.40;
+          // Near-miss bonus
+          const edgeDistL=Math.abs(bx-(p.x+COLLISION_INSET));
+          const edgeDistR=Math.abs(bx-(p.x+p.w-COLLISION_INSET));
+          const edgeDist=Math.min(edgeDistL,edgeDistR);
+          if(edgeDist<8){
+            pts+=3;
+            spawnParticles(bx,p.y,8,"#ffffff",2,20);
           }
-          p.landed = true;
+          // Overdrive multiplier
+          if(overdriveTimer>0) pts*=3;
+          score+=pts;
+          if(score>best){
+            best=score;
+            localStorage.setItem("nb_best2",String(best));
+          }
+          spawnParticles(bx,p.y,4,`hsl(${p.hue},90%,65%)`,1.5,20);
           break;
         }
       }
     }
   }
 
-  /* Remove off-screen / dead platforms */
-  for (var i = platforms.length - 1; i >= 0; i--) {
-    if (platforms[i].y > H + 60 || !platforms[i].alive) {
-      platforms.splice(i, 1);
+  // Shard collection
+  for(let i=shards.length-1;i>=0;i--){
+    const s=shards[i];
+    if(s.collected) continue;
+    const dx=ball.x-s.x, dy=ball.y-s.y;
+    if(dx*dx+dy*dy<(BALL_R+SHARD_SIZE)*(BALL_R+SHARD_SIZE)){
+      s.collected=true;
+      score+=5;
+      overdriveMeter=Math.min(OVERDRIVE_FILL,overdriveMeter+15);
+      spawnParticles(s.x,s.y,18,`hsl(${(hue+120)%360},100%,75%)`,3,35);
+      triggerShake(1.5,5);
+      if(score>best){best=score;localStorage.setItem("nb_best2",String(best));}
     }
   }
 
-  /* Death / Void Dash check */
-  if (player.y > H + 50) {
-    if (dashCharges > 0 && dashInvuln <= 0) {
-      /* Void Dash! */
-      dashCharges--;
-      dashUsed = true;
-      player.vy = BOUNCE_VEL * 1.3;
-      player.y = H - 60;
-      dashInvuln = 0.45;
-      dashFlashTime = 0.45;
-      vignetteAlpha = 1;
-      triggerShake(8, 0.25);
-      spawnParticles(player.x, player.y, 24, 280, 220);
-    } else {
-      gameOver();
-      return;
-    }
+  // Overdrive trigger
+  if(overdriveMeter>=OVERDRIVE_FILL&&overdriveTimer<=0){
+    overdriveTimer=OVERDRIVE_DURATION;
+    overdriveMeter=0;
+    spawnParticles(ball.x,ball.y,30,`hsl(${hue},100%,90%)`,4,45);
+    triggerShake(4,12);
+  }
+  if(overdriveTimer>0) overdriveTimer--;
+
+  // Cleanup
+  platforms=platforms.filter(function(p){return p.y<H+60;});
+  shards=shards.filter(function(s){return s.y<H+60&&!s.collected;});
+
+  // Fall death
+  if(ball.y-BALL_R>H+30){
+    state="gameover";
+    gameOverDelay=40;
+    triggerShake(10,35);
+    spawnParticles(ball.x,H-40,45,`hsl(${hue},100%,60%)`,4.5,55);
   }
 
-  /* Update particles */
-  for (var i = particles.length - 1; i >= 0; i--) {
-    var pp = particles[i];
-    pp.x += pp.vx * dt;
-    pp.y += pp.vy * dt;
-    pp.vy += 300 * dt;
-    pp.life -= dt;
-    if (pp.life <= 0) particles.splice(i, 1);
-  }
+  // Shake decay
+  if(shakeT>0) shakeT--;
 
-  /* Update rings */
-  for (var i = rings.length - 1; i >= 0; i--) {
-    var rr = rings[i];
-    rr.life -= dt;
-    rr.r = rr.maxR * (1 - rr.life / rr.maxLife);
-    if (rr.life <= 0) rings.splice(i, 1);
-  }
-
-  /* Update trails */
-  for (var i = trails.length - 1; i >= 0; i--) {
-    trails[i].life -= dt;
-    trails[i].y += sd;
-    if (trails[i].life <= 0) trails.splice(i, 1);
-  }
-
-  /* Shake decay */
-  if (shakeDur > 0) {
-    shakeDur -= dt;
-    shakeX *= 0.85;
-    shakeY *= 0.85;
-  } else {
-    shakeX = 0; shakeY = 0;
-  }
+  updateParticles();
 }
 
-/* ── Game Over ── */
-function gameOver() {
-  state = STATE_OVER;
-  triggerShake(14, 0.4);
-  spawnParticles(player.x, player.y, 40, 0, 250);
-
-  if (score > bestScore) {
-    bestScore = score;
-    localStorage.setItem(LS_KEY, String(bestScore));
-  }
-
-  finalScoreEl.textContent = String(score);
-  bestScoreEl.textContent = 'Best: ' + bestScore;
-  var hl = 'Perfect streak: ' + maxStreak + ' &middot; Max mult: x' + maxMult;
-  if (dashUsed) hl += '<br>Void Dash used!';
-  runHighlightsEl.innerHTML = hl;
-  overPanel.classList.add('active');
-
-  /* Keep rendering for particles/shake fadeout */
-  lastTime = performance.now();
-  requestAnimationFrame(overLoop);
-}
-
-function overLoop(now) {
-  var dt = (now - lastTime) / 1000;
-  lastTime = now;
-  dt = Math.min(dt, 1 / 30);
-
-  for (var i = particles.length - 1; i >= 0; i--) {
-    var pp = particles[i];
-    pp.x += pp.vx * dt;
-    pp.y += pp.vy * dt;
-    pp.vy += 300 * dt;
-    pp.life -= dt;
-    if (pp.life <= 0) particles.splice(i, 1);
-  }
-  for (var i = rings.length - 1; i >= 0; i--) {
-    rings[i].life -= dt;
-    rings[i].r = rings[i].maxR * (1 - rings[i].life / rings[i].maxLife);
-    if (rings[i].life <= 0) rings.splice(i, 1);
-  }
-  if (shakeDur > 0) {
-    shakeDur -= dt; shakeX *= 0.85; shakeY *= 0.85;
-  } else { shakeX = 0; shakeY = 0; }
-
-  render();
-  if (state === STATE_OVER && (particles.length > 0 || shakeDur > 0)) {
-    requestAnimationFrame(overLoop);
-  }
-}
-
-/* ── Render ── */
-function render() {
-  ctx.save();
-  ctx.translate(shakeX, shakeY);
-
-  /* Background */
-  var grad = ctx.createLinearGradient(0, 0, 0, H);
-  grad.addColorStop(0, '#0a0014');
-  grad.addColorStop(0.5, '#120028');
-  grad.addColorStop(1, '#0a0018');
-  ctx.fillStyle = grad;
-  ctx.fillRect(-20, -20, W + 40, H + 40);
-
-  /* Subtle lane guides */
-  ctx.globalAlpha = 0.06;
-  ctx.strokeStyle = '#fff';
-  ctx.lineWidth = 1;
-  for (var i = 0; i < LANE_COUNT; i++) {
-    var lx = laneX(i);
-    ctx.beginPath();
-    ctx.moveTo(lx, 0);
-    ctx.lineTo(lx, H);
-    ctx.stroke();
-  }
-  ctx.globalAlpha = 1;
-
-  /* Trails */
-  for (var i = 0; i < trails.length; i++) {
-    var t = trails[i];
-    var ta = t.life / t.maxLife;
-    ctx.globalAlpha = ta * 0.35;
-    ctx.fillStyle = 'hsl(' + t.hue + ',100%,65%)';
-    ctx.beginPath();
-    ctx.arc(t.x, t.y, BALL_R * ta, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  ctx.globalAlpha = 1;
-
-  /* Platforms */
-  for (var i = 0; i < platforms.length; i++) {
-    var p = platforms[i];
-    if (!p.alive) continue;
-    var alpha = 1;
-    if (p.type === 'blink' && !p.visible) alpha = 0.12;
-    if (p.type === 'break' && p.breakTimer > 0) alpha = p.breakTimer / 0.40;
-
-    ctx.globalAlpha = alpha;
-    var halfW = p.w / 2;
-    var hue;
-    if (p.type === 'static') hue = 170;
-    else if (p.type === 'moving') hue = 280;
-    else if (p.type === 'break') hue = 30;
-    else hue = 50;
-
-    /* Glow layer */
-    ctx.globalAlpha = alpha * 0.15;
-    ctx.fillStyle = 'hsl(' + hue + ',100%,70%)';
-    drawRoundRect(p.x, p.y - 2, halfW + 3, PLAT_H + 4, 4);
-    ctx.fill();
-
-    /* Platform body */
-    ctx.globalAlpha = alpha;
-    ctx.fillStyle = 'hsl(' + hue + ',80%,55%)';
-    drawRoundRect(p.x, p.y, halfW, PLAT_H, 4);
-    ctx.fill();
-
-    /* Perfect zone marker */
-    if (p.visible && alpha > 0.5) {
-      ctx.globalAlpha = alpha * 0.25;
-      var pzHalf = halfW * 0.15;
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(p.x - pzHalf, p.y + 1, pzHalf * 2, PLAT_H - 2);
-    }
-  }
-  ctx.globalAlpha = 1;
-
-  /* Rings */
-  for (var i = 0; i < rings.length; i++) {
-    var rr = rings[i];
-    ctx.globalAlpha = (rr.life / rr.maxLife) * 0.5;
-    ctx.strokeStyle = 'hsl(' + rr.hue + ',100%,70%)';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(rr.x, rr.y, rr.r, 0, Math.PI * 2);
-    ctx.stroke();
-  }
-  ctx.globalAlpha = 1;
-
-  /* Particles */
-  for (var i = 0; i < particles.length; i++) {
-    var pp = particles[i];
-    var pa = pp.life / pp.maxLife;
-    ctx.globalAlpha = pa;
-    ctx.fillStyle = 'hsl(' + pp.hue + ',100%,65%)';
-    ctx.beginPath();
-    ctx.arc(pp.x, pp.y, pp.size * pa, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  ctx.globalAlpha = 1;
-
-  /* Ball */
-  if (state === STATE_PLAYING || state === STATE_OVER) {
-    var bHue = hslCycle(gameTime || 0, mult || 1);
-    var ballAlpha = 1;
-    if (dashFlashTime > 0) {
-      ballAlpha = (Math.sin((gameTime || 0) * 40) > 0) ? 1 : 0.3;
-    }
-
-    /* Outer glow */
-    ctx.globalAlpha = ballAlpha * 0.2;
-    ctx.fillStyle = 'hsl(' + bHue + ',100%,60%)';
-    ctx.beginPath();
-    ctx.arc(player.x, player.y, BALL_R + 6, 0, Math.PI * 2);
-    ctx.fill();
-
-    /* Body */
-    ctx.globalAlpha = ballAlpha;
-    ctx.fillStyle = 'hsl(' + bHue + ',100%,70%)';
-    ctx.beginPath();
-    ctx.arc(player.x, player.y, BALL_R, 0, Math.PI * 2);
-    ctx.fill();
-
-    /* Core highlight */
-    ctx.fillStyle = '#fff';
-    ctx.globalAlpha = ballAlpha * 0.5;
-    ctx.beginPath();
-    ctx.arc(player.x - 2, player.y - 3, BALL_R * 0.4, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  ctx.globalAlpha = 1;
-
-  /* Vignette on dash */
-  if (vignetteAlpha > 0) {
-    var vg = ctx.createRadialGradient(W / 2, H / 2, H * 0.2, W / 2, H / 2, H * 0.7);
-    vg.addColorStop(0, 'rgba(100,0,255,0)');
-    vg.addColorStop(1, 'rgba(100,0,255,' + (vignetteAlpha * 0.4).toFixed(2) + ')');
-    ctx.fillStyle = vg;
-    ctx.fillRect(0, 0, W, H);
-  }
-
-  /* HUD */
-  if (state === STATE_PLAYING) {
-    var hudHue = hslCycle(gameTime, mult);
-
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 28px "Segoe UI",system-ui,sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'top';
-    ctx.fillText(String(score), W / 2, 14);
-
-    if (mult > 1) {
-      ctx.font = 'bold 16px "Segoe UI",system-ui,sans-serif';
-      ctx.fillStyle = 'hsl(' + hudHue + ',100%,70%)';
-      ctx.fillText('x' + mult, W / 2, 46);
-    }
-
-    if (perfectStreak > 0) {
-      ctx.font = '12px "Segoe UI",system-ui,sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.5)';
-      ctx.fillText('streak ' + perfectStreak, W / 2, mult > 1 ? 66 : 46);
-    }
-
-    /* Dash ready indicator */
-    if (dashCharges > 0) {
-      ctx.fillStyle = 'hsl(280,100%,70%)';
-      ctx.font = 'bold 11px "Segoe UI",system-ui,sans-serif';
-      ctx.textAlign = 'right';
-      ctx.fillText('DASH READY', W - 12, 16);
-    }
-
-    /* Lane dots at bottom */
-    ctx.textAlign = 'center';
-    for (var i = 0; i < LANE_COUNT; i++) {
-      ctx.fillStyle = (i === player.lane) ? 'hsl(' + hudHue + ',100%,70%)' : 'rgba(255,255,255,0.15)';
-      ctx.beginPath();
-      ctx.arc(W / 2 - 16 + i * 16, H - 16, (i === player.lane) ? 4 : 3, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-
-  ctx.restore();
-}
-
-/* ── Idle start-screen render loop ── */
-function idleRender() {
-  if (state !== STATE_START) return;
-  ctx.save();
-
-  var grad = ctx.createLinearGradient(0, 0, 0, H);
-  grad.addColorStop(0, '#0a0014');
-  grad.addColorStop(0.5, '#120028');
-  grad.addColorStop(1, '#0a0018');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, W, H);
-
-  var t = performance.now() / 1000;
-
-  /* Decorative platforms */
-  for (var i = 0; i < 5; i++) {
-    var px = W * 0.15 + (i % 3) * W * 0.32;
-    var py = H * 0.28 + i * 72 + Math.sin(t * 0.8 + i * 1.2) * 14;
-    var pw = 55 + i * 12;
-    var hue = (170 + i * 45) % 360;
-    ctx.globalAlpha = 0.25;
-    ctx.fillStyle = 'hsl(' + hue + ',70%,45%)';
-    drawRoundRect(px, py, pw / 2, 8, 4);
-    ctx.fill();
-  }
-
-  /* Animated ball */
-  ctx.globalAlpha = 0.5;
-  var bx = W / 2 + Math.sin(t * 1.5) * 30;
-  var by = H * 0.22 + Math.sin(t * 2.5) * 20;
-  ctx.fillStyle = 'hsl(' + ((t * 40) % 360) + ',100%,65%)';
+/* ======== Draw ======== */
+function roundRect(x,y,w,h,r){
   ctx.beginPath();
-  ctx.arc(bx, by, BALL_R, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.globalAlpha = 1;
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+
+function draw(){
+  ctx.save();
+
+  // Screen shake offset
+  if(shakeT>0){
+    const mag=shakeIntensity*(shakeT/35);
+    ctx.translate((Math.random()-0.5)*mag*2,(Math.random()-0.5)*mag*2);
+  }
+
+  // Background gradient
+  const bg=ctx.createLinearGradient(0,0,0,H);
+  bg.addColorStop(0,"#0b0f1a");
+  bg.addColorStop(0.5,"#10152a");
+  bg.addColorStop(1,"#141828");
+  ctx.fillStyle=bg;
+  ctx.fillRect(-15,-15,W+30,H+30);
+
+  // Subtle grid lines
+  ctx.strokeStyle="rgba(80,100,160,0.06)";
+  ctx.lineWidth=1;
+  for(let gy=((frameCount*0.5)%40);gy<H;gy+=40){
+    ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();
+  }
+
+  // Lane guides
+  ctx.strokeStyle="rgba(100,130,200,0.1)";
+  ctx.setLineDash([4,8]);
+  ctx.beginPath();ctx.moveTo(LANE_L(),0);ctx.lineTo(LANE_L(),H);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(LANE_R(),0);ctx.lineTo(LANE_R(),H);ctx.stroke();
+  ctx.setLineDash([]);
+
+  if(state==="start"){
+    drawStartScreen();
+    ctx.restore();
+    return;
+  }
+
+  drawGame();
+
+  if(state==="gameover"){
+    drawGameOver();
+  }
+
+  // Copied msg
+  if(copiedMsg>0){
+    const ca=Math.min(1,copiedMsg/40);
+    ctx.globalAlpha=ca;
+    ctx.fillStyle="#44dd88";
+    ctx.font="bold 14px 'Segoe UI',system-ui,sans-serif";
+    ctx.textAlign="center";
+    ctx.fillText("Link copied!",W/2,H*0.88);
+    ctx.globalAlpha=1;
+    copiedMsg--;
+  }
 
   ctx.restore();
-  requestAnimationFrame(idleRender);
 }
-requestAnimationFrame(idleRender);
+
+function drawGame(){
+  // Platforms
+  for(let i=0;i<platforms.length;i++){
+    const p=platforms[i];
+    if(p.broken||p.fakeReveal) continue;
+    if(p.y<-20||p.y>H+20) continue;
+
+    ctx.save();
+    if(p.type==="fake"){
+      // Looks normal but slightly transparent
+      ctx.globalAlpha=0.55;
+    }
+
+    if(p.type==="breakable"){
+      ctx.strokeStyle=`hsl(${p.hue},70%,55%)`;
+      ctx.lineWidth=2;
+      ctx.setLineDash([4,3]);
+      ctx.strokeRect(p.x,p.y,p.w,p.h);
+      ctx.setLineDash([]);
+      // Faint fill
+      ctx.fillStyle=`hsla(${p.hue},60%,40%,0.15)`;
+      ctx.fillRect(p.x,p.y,p.w,p.h);
+    } else {
+      // Normal / fake platform
+      const g=ctx.createLinearGradient(p.x,p.y,p.x+p.w,p.y);
+      g.addColorStop(0,`hsl(${p.hue},75%,48%)`);
+      g.addColorStop(1,`hsl(${(p.hue+25)%360},75%,58%)`);
+      ctx.fillStyle=g;
+      roundRect(p.x,p.y,p.w,p.h,4);
+      ctx.fill();
+
+      // Hot zone highlight
+      ctx.fillStyle=`hsla(${p.hue},100%,82%,0.3)`;
+      ctx.fillRect(p.hotX,p.y+1,p.hotW,p.h-2);
+    }
+
+    // Glow
+    ctx.shadowColor=`hsl(${p.hue},100%,60%)`;
+    ctx.shadowBlur=10;
+    ctx.globalAlpha=0.12;
+    ctx.fillStyle=`hsl(${p.hue},100%,60%)`;
+    ctx.fillRect(p.x,p.y-2,p.w,p.h+4);
+    ctx.shadowBlur=0;
+    ctx.restore();
+  }
+
+  // Shards
+  for(let i=0;i<shards.length;i++){
+    const s=shards[i];
+    if(s.collected||s.y<-20||s.y>H+20) continue;
+    ctx.save();
+    ctx.translate(s.x,s.y);
+    ctx.rotate(frameCount*0.05);
+    const sh=(hue+120)%360;
+    ctx.fillStyle=`hsl(${sh},100%,70%)`;
+    ctx.shadowColor=`hsl(${sh},100%,80%)`;
+    ctx.shadowBlur=12;
+    ctx.beginPath();
+    ctx.moveTo(0,-SHARD_SIZE);
+    ctx.lineTo(SHARD_SIZE*0.6,0);
+    ctx.lineTo(0,SHARD_SIZE);
+    ctx.lineTo(-SHARD_SIZE*0.6,0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.restore();
+  }
+
+  // Particles
+  drawParticles();
+
+  // Ball trail
+  for(let i=0;i<ball.trail.length;i++){
+    const t=ball.trail[i];
+    const a=(i/ball.trail.length)*0.3;
+    const s=BALL_R*(i/ball.trail.length);
+    ctx.beginPath();
+    ctx.arc(t.x,t.y,s,0,Math.PI*2);
+    ctx.fillStyle=`hsla(${hue},100%,70%,${a})`;
+    ctx.fill();
+  }
+
+  // Ball
+  ctx.save();
+  if(overdriveTimer>0){
+    // Chromatic aberration split
+    ctx.globalAlpha=0.35;
+    ctx.beginPath();ctx.arc(ball.x-3,ball.y-1,BALL_R+1,0,Math.PI*2);
+    ctx.fillStyle=`hsl(${(hue+70)%360},100%,65%)`;ctx.fill();
+    ctx.beginPath();ctx.arc(ball.x+3,ball.y+1,BALL_R+1,0,Math.PI*2);
+    ctx.fillStyle=`hsl(${(hue-70+360)%360},100%,65%)`;ctx.fill();
+    ctx.globalAlpha=1;
+  }
+  ctx.beginPath();
+  ctx.arc(ball.x,ball.y,BALL_R,0,Math.PI*2);
+  const bGrad=ctx.createRadialGradient(ball.x-2,ball.y-2,1,ball.x,ball.y,BALL_R);
+  bGrad.addColorStop(0,`hsl(${hue},100%,92%)`);
+  bGrad.addColorStop(1,`hsl(${hue},100%,58%)`);
+  ctx.fillStyle=bGrad;
+  ctx.shadowColor=`hsl(${hue},100%,70%)`;
+  ctx.shadowBlur=18;
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.restore();
+
+  // ---- HUD ----
+  // Score top-left
+  ctx.fillStyle="#fff";
+  ctx.font="bold 24px 'Segoe UI',system-ui,sans-serif";
+  ctx.textAlign="left";
+  ctx.textBaseline="top";
+  ctx.fillText(String(score),14,10);
+
+  // Best top-right
+  ctx.fillStyle="#6a7490";
+  ctx.font="13px 'Segoe UI',system-ui,sans-serif";
+  ctx.textAlign="right";
+  ctx.fillText("BEST "+best,W-12,14);
+
+  // Combo top-center
+  if(combo>1){
+    ctx.fillStyle=`hsl(${hue},100%,75%)`;
+    ctx.font="bold 16px 'Segoe UI',system-ui,sans-serif";
+    ctx.textAlign="center";
+    ctx.fillText("x"+combo,W/2,12);
+  }
+
+  // Overdrive meter
+  const mW=80, mH=5, mX=W/2-mW/2, mY=34;
+  ctx.fillStyle="rgba(255,255,255,0.08)";
+  roundRect(mX,mY,mW,mH,2);ctx.fill();
+  const fillR=overdriveTimer>0?(overdriveTimer/OVERDRIVE_DURATION):(overdriveMeter/OVERDRIVE_FILL);
+  if(fillR>0){
+    const mc=overdriveTimer>0?`hsl(${hue},100%,68%)`:`hsl(${(hue+60)%360},80%,50%)`;
+    ctx.fillStyle=mc;
+    roundRect(mX,mY,mW*fillR,mH,2);ctx.fill();
+  }
+  if(overdriveTimer>0){
+    const pulse=0.6+Math.sin(frameCount*0.25)*0.3;
+    ctx.globalAlpha=pulse;
+    ctx.fillStyle=`hsl(${hue},100%,80%)`;
+    ctx.font="bold 9px 'Segoe UI',system-ui,sans-serif";
+    ctx.textAlign="center";
+    ctx.textBaseline="top";
+    ctx.fillText("OVERDRIVE",W/2,mY+mH+3);
+    ctx.globalAlpha=1;
+  }
+  ctx.textBaseline="alphabetic";
+}
+
+function drawStartScreen(){
+  // Animated background particles
+  if(Math.random()<0.15){
+    spawnParticles(Math.random()*W,Math.random()*H,1,`hsla(${hue},60%,50%,0.5)`,0.3,60);
+  }
+  drawParticles();
+
+  // Title
+  ctx.save();
+  ctx.shadowColor=`hsl(${hue},100%,60%)`;
+  ctx.shadowBlur=25;
+  ctx.fillStyle=`hsl(${hue},100%,75%)`;
+  ctx.font="bold 34px 'Segoe UI',system-ui,sans-serif";
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillText("NEON BOUNCE",W/2,H*0.22);
+  ctx.shadowBlur=0;
+  ctx.restore();
+
+  ctx.fillStyle="#a0aac0";
+  ctx.font="14px 'Segoe UI',system-ui,sans-serif";
+  ctx.textAlign="center";
+  ctx.fillText("Overdrive Lanes",W/2,H*0.22+28);
+
+  // Bouncing preview ball
+  const py=H*0.36+Math.sin(Date.now()*0.003)*12;
+  ctx.save();
+  ctx.beginPath();ctx.arc(W/2,py,BALL_R+2,0,Math.PI*2);
+  ctx.fillStyle=`hsl(${hue},100%,70%)`;
+  ctx.shadowColor=`hsl(${hue},100%,60%)`;
+  ctx.shadowBlur=15;
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.restore();
+
+  // Instructions
+  ctx.fillStyle="#7a8498";
+  ctx.font="13px 'Segoe UI',system-ui,sans-serif";
+  const iy=H*0.48;
+  ctx.fillText("Tap or Space to bounce & switch lanes",W/2,iy);
+  ctx.fillText("Land on glowing centers for combos",W/2,iy+22);
+  ctx.fillText("Collect shards \u2666 to charge Overdrive",W/2,iy+44);
+
+  // Best score
+  if(best>0){
+    ctx.fillStyle="#5a6478";
+    ctx.font="13px 'Segoe UI',system-ui,sans-serif";
+    ctx.fillText("Best: "+best,W/2,H*0.65);
+  }
+
+  // Challenge banner
+  if(challengeTarget!==null){
+    ctx.fillStyle="hsl(45,100%,65%)";
+    ctx.font="bold 16px 'Segoe UI',system-ui,sans-serif";
+    ctx.fillText("\u26a1 Challenge: Beat "+challengeTarget+" \u26a1",W/2,H*0.72);
+  }
+
+  // Tap prompt
+  const tp=0.5+Math.sin(Date.now()*0.004)*0.35;
+  ctx.fillStyle=`hsla(${hue},100%,80%,${tp})`;
+  ctx.font="bold 18px 'Segoe UI',system-ui,sans-serif";
+  ctx.fillText("TAP TO START",W/2,H*0.82);
+}
+
+function drawGameOver(){
+  // Overlay
+  ctx.fillStyle="rgba(8,12,24,0.78)";
+  ctx.fillRect(-15,-15,W+30,H+30);
+
+  drawParticles();
+
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+
+  // Game Over
+  ctx.fillStyle="#ff4466";
+  ctx.font="bold 30px 'Segoe UI',system-ui,sans-serif";
+  ctx.fillText("GAME OVER",W/2,H*0.25);
+
+  // Score
+  ctx.fillStyle="#fff";
+  ctx.font="bold 52px 'Segoe UI',system-ui,sans-serif";
+  ctx.fillText(String(score),W/2,H*0.36);
+
+  ctx.fillStyle="#6a7490";
+  ctx.font="14px 'Segoe UI',system-ui,sans-serif";
+  ctx.fillText("Best: "+best,W/2,H*0.36+36);
+
+  // Challenge result
+  if(challengeTarget!==null){
+    const won=score>=challengeTarget;
+    ctx.fillStyle=won?"#44ff88":"#ff6644";
+    ctx.font="bold 15px 'Segoe UI',system-ui,sans-serif";
+    ctx.fillText(won?"\u2714 Challenge beaten!":"\u2716 Need "+challengeTarget+" to win",W/2,H*0.36+62);
+  }
+
+  // Share button
+  const bw=160, bh=40;
+  const bx=W/2-bw/2, by=H*0.56;
+  ctx.fillStyle=`hsl(${hue},65%,42%)`;
+  roundRect(bx,by,bw,bh,10);
+  ctx.fill();
+  // Button glow
+  ctx.save();
+  ctx.shadowColor=`hsl(${hue},100%,50%)`;
+  ctx.shadowBlur=10;
+  ctx.fillStyle=`hsl(${hue},65%,42%)`;
+  roundRect(bx,by,bw,bh,10);
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.restore();
+
+  ctx.fillStyle="#fff";
+  ctx.font="bold 14px 'Segoe UI',system-ui,sans-serif";
+  ctx.fillText("Challenge a Friend",W/2,by+bh/2);
+
+  shareBtn.x=bx; shareBtn.y=by; shareBtn.w=bw; shareBtn.h=bh;
+
+  // Restart prompt
+  if(gameOverDelay<=0){
+    const rp=0.4+Math.sin(Date.now()*0.004)*0.25;
+    ctx.fillStyle=`hsla(0,0%,100%,${rp})`;
+    ctx.font="14px 'Segoe UI',system-ui,sans-serif";
+    ctx.fillText("Tap to restart",W/2,H*0.72);
+  }
+
+  ctx.textBaseline="alphabetic";
+}
+
+/* ======== Main loop ======== */
+function loop(){
+  update();
+  draw();
+  if(state!=="playing") hue=(hue+0.3)%360;
+  requestAnimationFrame(loop);
+}
+
+initGame();
+loop();
 
 })();
 </script>
